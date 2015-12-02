@@ -1,0 +1,49 @@
+
+Sprint 1:
+
+Hipotesis:
+•	Creemos que las mujeres desconocen las zonas donde ocurren acosos con mayor frecuencia y las podemos ayudar mostrando dichas zonas en un mapa, sabremos que estamos en lo correcto si se sienten atraídas  en navegar el mapa de la ciudad entero.
+
+•	Creemos que el uso de nicknames  o apodos facilitaran el anonimato de los usuarios y sabremos que estamos en lo correcto cuando aumente el número de registros  en la aplicación.
+
+Croonograma:
+  Viernes 4 de Diciembre 	[4 horas]
+  Sábado 5 de Diciembre	 	[4 horas]
+  Domingo 6 de Diciembre	[4 horas]	
+  Lunes 7 de Diciembre		[2 horas] [Prueba de avances]
+  Martes 8 de Diciembre 		[2 horas]
+  Sábado 12 de Diciembre	[2 horas] [Reunión con usuarios]
+  Lunes 14 de Diciembre		[2 horas] [Prueba de avances]
+  Martes 15 de Diciembre	[2 horas]
+
+Historias de usuario a trabajar:
+	Registrarme
+	Iniciar sesión
+	Ver mapa
+
+
+
+Sprint 2:
+
+Hipotesis:
+•	Creemos que ofreciendo la opción de ubicar casos de acoso en un mapa  fomentaría la colaboración y el apoyo  social entre y para mujeres, sabremos que estamos en lo correcto cuando aumente el número de casos ingresados semanalmente.
+
+Historias de usuario a trabajar:
+  Agregar caso
+  Eliminar caso
+  Desplegar caso
+
+
+
+Sprint 3:
+
+Hipotesis:
+•	Si se agrega un sistema de alerta en tiempo real que advierta a una mujer la aproximación a  una zona de riesgo disminuirá las veces que saca su teléfono.
+
+•	Creemos que el uso de intensidad de vibraciones puede ayudar a una mujer a advertirle que tan cercana esta de una zona de riesgo sabremos que estamos en lo correcto cuando la mujer sea consciente del patrón de vibración
+
+Historias de usuario a trabajar:
+  Filtro tiempo personalizado
+  Filtro tiempo rápido
+  Filtro tipo de caso
+  Activar alarma
