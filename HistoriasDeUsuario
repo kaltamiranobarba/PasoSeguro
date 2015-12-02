@@ -1,0 +1,63 @@
+
+Historia:	Registrarme
+Como:	Usuario
+Quiero	Ingresar información necesaria para usar la app
+Para:	Iniciar sesión e ingresar casos.
+
+
+Historia:	Iniciar sesión
+Como:	Usuario
+Quiero	Ingresar usuario y contraseña.
+Para:	Entrar y hacer uso de la aplicación
+
+
+
+Historia:	Agregar caso
+Como:	Usuario
+Quiero	Ingresar la descripción y ubicación de un caso de acoso
+Para:	Informar a otros usuarios
+
+
+
+Historia:	Activar alerta
+Como:	Usuario
+Quiero	Encender el sonido o vibración para que me advierta cuando este a 15 mts de una zona de peligro
+Para:	Preevenir dicha zona
+
+
+Historia:	Filtro tiempo Rápido
+Como:	Usuario
+Quiero	Filtrar los casos de la última semana, mes o año rápidamente.
+Para:	Ver los casos más recientes y mejorar el orden.
+
+
+Historia:	Filtro tiempo Personalizado
+Como:	Usuario
+Quiero	Filtrar los casos de acoso en un rango de tiempo.
+Para:	Ver los casos en el tiempo que el usuario desea y mejorar el orden.
+
+Historia:	Filtro Tipo acoso 
+Como:	Usuario
+Quiero	Filtrar los casos de acoso que sean del tipo que especifique
+Para:	Ver en el mapa únicamente los casos del tipo en el que estoy interesado
+
+
+Historia:	Eliminar caso
+Como:	Usuario
+Quiero	Borrar un caso 
+Para:	Sacarlo del mapa
+
+
+
+Historia:	Desplegar caso
+Como:	Usuario
+Quiero	Ver la descripción del acoso
+Para:	Conocer el detalle del acoso en su respectiva ubicación
+
+
+
+Historia:	Ver mapa
+Como:	Usuario
+Quiero	Ver las ubicaciones de los casos de acoso 
+Para:	Representarlos geográficamente
+
