@@ -3,4 +3,6 @@
     <string name="SName">Usuario</string>
     <string name="SPass">Clave</string>
     <string name="button_enter">Ingresar</string>
+    <string name="title_activity_map">Map</string>
+    <string name="title_activity_signup">SignupActivity</string>
 </resources>
