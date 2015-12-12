@@ -28,12 +28,13 @@
         android:textSize="20dp" />
 
     <EditText
-        android:id="@+id/ET_user"
+        android:id="@+id/et_loginUser"
         android:layout_width="250dp"
         android:layout_height="40dp"
         android:gravity="center"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
+        android:inputType="textPersonName"
     />
 
     <TextView
@@ -45,15 +46,16 @@
         android:textSize="20dp" />
 
     <EditText
-        android:id="@+id/ET_pass"
+        android:id="@+id/et_loginPass"
         android:layout_width="250dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
+        android:inputType="textPassword"
     />
 
     <Button
-        android:id="@+id/B_enter"
+        android:id="@+id/btn_loginEnter"
         android:text="@string/button_enter"
         android:layout_height="45dp"
         android:layout_width="300dp"
