@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -27,7 +28,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
 
-        Parse.initialize(this, "gtUrodDDuFstbcyGN9gkyBGTDliHmtk5ADsMzGjH", "3rKd6641H0J5ILak2yPUiIBmOjsQxtc3PlYODIWG");
+
         btn_loginEnter = (Button) findViewById(R.id.btn_loginEnter);
         et_loginPass = (EditText) findViewById(R.id.et_loginPass);
         et_loginUser = (EditText) findViewById(R.id.et_loginUser);
@@ -40,46 +41,34 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         user = et_loginUser.getText().toString();
         pass= et_loginPass.getText().toString();
 
-            if (login(user, pass)) {
-                Toast.makeText(getApplicationContext(), "LOGIN EXITOSO!", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(LoginActivity.this, MapActivity.class);
-                startActivity(intent);
-            } else {
-                Toast.makeText(getApplicationContext(), "Usuario o clave erróneo", Toast.LENGTH_LONG).show();
-            }
-        }
-
-
-
-
-
-    public boolean login(String user, String pass){
-
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
-        query.whereEqualTo("user",user);
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
-            public void done(ParseObject object, ParseException e) {
-                if (object == null) {
-                    Log.d("objeto","NO SE RECUPERO");
-
+        ParseUser.logInInBackground(user, pass, new LogInCallback() {
+            public void done(ParseUser user, ParseException e) {
+                if (user != null) {
+                    Toast.makeText(getApplicationContext(), "Inicio exitoso!", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(LoginActivity.this, MapActivity.class);
+                    startActivity(intent);
                 } else {
-                    userRetrieved = object.getString("User");
-                    passRetrieved = object.getString("pass");
-                    emailRetrieved = object.getString("email");
-                    ageRetrieved = object.getString("age");
-                    retrieved = true;
+                    Toast.makeText(getApplicationContext(), "Usuario o clave erróneo", Toast.LENGTH_LONG).show();
                 }
             }
-
         });
-        if(retrieved){
-            if(pass.equals(passRetrieved))
-                return true;
-            else
-                return false;
-        }
-        return false;
+
+
+
+
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
 
 
 }

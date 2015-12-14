@@ -5,4 +5,6 @@
     <string name="button_enter">Ingresar</string>
     <string name="title_activity_map">Map</string>
     <string name="title_activity_signup">SignupActivity</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="signup">Registrarse</string>
 </resources>
