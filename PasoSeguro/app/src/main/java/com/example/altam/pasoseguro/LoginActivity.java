@@ -41,6 +41,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         user = et_loginUser.getText().toString();
         pass= et_loginPass.getText().toString();
 
+
         ParseUser.logInInBackground(user, pass, new LogInCallback() {
             public void done(ParseUser user, ParseException e) {
                 if (user != null) {
@@ -57,17 +58,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
 
     }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if ((keyCode == KeyEvent.KEYCODE_BACK))
-        {
-            finish();
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
 
 
 
