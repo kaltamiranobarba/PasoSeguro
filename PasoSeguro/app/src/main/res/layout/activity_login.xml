@@ -7,60 +7,74 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#D8D8D8"
     tools:context="com.example.altam.pasoseguro.LoginActivity"
     android:orientation="vertical">
+
+    <!--
+    android:background="#D8C4AC"
+    -->
+
 
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/logo"
+        android:src="@drawable/logo2"
         android:layout_gravity="center"
-        android:layout_marginTop="40dp"
-        />
+        android:layout_marginTop="40dp" />
 
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/SName"
-        android:layout_gravity="center"
-        android:layout_marginTop="70dp"
-        android:textSize="20dp" />
 
     <EditText
         android:id="@+id/et_loginUser"
         android:layout_width="250dp"
-        android:layout_height="40dp"
-        android:gravity="center"
+        android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:inputType="textPersonName"
-    />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/SPass"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:textSize="20dp" />
+        android:layout_marginTop="40dp"
+        android:hint="@string/defaultuser"
+        android:background="@drawable/rounded_edittext"
+        android:textCursorDrawable="@drawable/cursor_color"
+        android:paddingLeft="15dp"
+        android:textColor="#000"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/et_loginPass"
         android:layout_width="250dp"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp"
+        android:hint="@string/defaultpassword"
+        android:background="@drawable/rounded_edittext"
+        android:textCursorDrawable="@drawable/cursor_color"
+        android:paddingLeft="15dp"
+        android:layout_marginTop="20dp"
+        android:textColor="#000"
         android:inputType="textPassword"
-    />
+        />
 
     <Button
         android:id="@+id/btn_loginEnter"
         android:text="@string/button_enter"
-        android:layout_height="45dp"
-        android:layout_width="300dp"
+        android:layout_height="55dp"
+        android:layout_width="250dp"
         android:layout_gravity="center"
-        android:layout_marginTop="50dp"
-    />
+        android:textColor="#000"
+        android:textSize="17dp"
+        android:typeface="sans"
+        android:background="@drawable/rounded_button"
+        android:layout_marginTop="20dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/registrate"
+        android:layout_marginTop="30dp"
+        android:textColor="#000"
+        android:textStyle="normal|bold|italic"
+        android:textSize="15dp"
+        android:clickable="true"
+        android:id="@+id/tvRegister"
+        android:layout_gravity="center_horizontal" />
+
 
 </LinearLayout>

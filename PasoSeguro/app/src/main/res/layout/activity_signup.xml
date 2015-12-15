@@ -8,76 +8,135 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.altam.pasoseguro.SignupActivity"
-    android:weightSum="1"
+    android:background="#D8D8D8"
+    android:weightSum="13"
     android:orientation="vertical">
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cómo te gustaría que te llamemos ?"
+        android:text="¡Bienvenido!"
+        android:textSize="25dp"
+        android:textStyle="normal|bold"
+        android:textColor="#424242"
+        android:layout_weight="1" />
 
-    />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Necesitamos algunos de tus datos para registarte a nuestro servicio."
+        android:textSize="20dp"
+        android:textStyle="normal"
+        android:textColor="#424242"
+        android:layout_weight="1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¿Cómo te gustaría que te llamemos ?"
+        android:textSize="17dp"
+        android:textStyle="normal|bold"
+        android:textColor="#424242"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1" />
 
     <EditText
         android:id="@+id/et_signupUser"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-    />
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_edittext"
+        android:textCursorDrawable="@drawable/cursor_color"
+        android:paddingLeft="15dp"
+        android:layout_weight="1" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Correo electronico"
-
-        />
+        android:textSize="17dp"
+        android:textStyle="normal|bold"
+        android:textColor="#424242"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"/>
 
     <EditText
         android:id="@+id/et_signupEmail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_edittext"
+        android:textCursorDrawable="@drawable/cursor_color"
+        android:paddingLeft="15dp"
+        android:layout_weight="1"  />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Contraseña"
-    />
+        android:textSize="17dp"
+        android:textStyle="normal|bold"
+        android:textColor="#424242"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1" />
 
     <EditText
         android:id="@+id/et_signupPass"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-    />
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_edittext"
+        android:textCursorDrawable="@drawable/cursor_color"
+        android:paddingLeft="15dp"
+        android:layout_weight="1" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Vuelve a ingresar tu contraseña"
-    />
+        android:textSize="17dp"
+        android:textStyle="normal|bold"
+        android:textColor="#424242"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1" />
 
     <EditText
         android:id="@+id/et_signupPass2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-    />
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_edittext"
+        android:textCursorDrawable="@drawable/cursor_color"
+        android:paddingLeft="15dp"
+        android:layout_weight="1" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Edad"
-    />
+        android:textSize="17dp"
+        android:textStyle="normal|bold"
+        android:textColor="#424242"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1" />
 
     <EditText
         android:id="@+id/et_signupAge"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-    />
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_edittext"
+        android:textCursorDrawable="@drawable/cursor_color"
+        android:paddingLeft="15dp"
+        android:layout_weight="1" />
+
     <Button
         android:id="@+id/btn_signup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="#FFF"
+        android:textSize="17dp"
+        android:typeface="sans"
+        android:background="@drawable/rounded_button"
         android:text="Registrarse!"
-    />
+        android:layout_marginTop="20dp"
+        android:layout_weight="1"
+        />
 
 </LinearLayout>

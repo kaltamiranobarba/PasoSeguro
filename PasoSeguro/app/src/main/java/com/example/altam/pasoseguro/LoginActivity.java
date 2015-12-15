@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.*;
@@ -16,6 +17,7 @@ import com.parse.*;
 public class LoginActivity extends Activity implements View.OnClickListener {
     Button btn_loginEnter;
     EditText et_loginUser, et_loginPass;
+    TextView tvRegister;
     String passRetrieved, userRetrieved, emailRetrieved, ageRetrieved;
     Boolean retrieved =false;
 
@@ -32,27 +34,46 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         btn_loginEnter = (Button) findViewById(R.id.btn_loginEnter);
         et_loginPass = (EditText) findViewById(R.id.et_loginPass);
         et_loginUser = (EditText) findViewById(R.id.et_loginUser);
+        tvRegister = (TextView) findViewById(R.id.tvRegister);
+
+        tvRegister.setOnClickListener(this);
         btn_loginEnter.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        String user, pass;
-        user = et_loginUser.getText().toString();
-        pass= et_loginPass.getText().toString();
+
+        switch (v.getId()) {
+            case R.id.btn_loginEnter:
+            {
+                String user, pass;
+                user = et_loginUser.getText().toString();
+                pass= et_loginPass.getText().toString();
 
 
-        ParseUser.logInInBackground(user, pass, new LogInCallback() {
-            public void done(ParseUser user, ParseException e) {
-                if (user != null) {
-                    Toast.makeText(getApplicationContext(), "Inicio exitoso!", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(LoginActivity.this, MapActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(getApplicationContext(), "Usuario o clave erróneo", Toast.LENGTH_LONG).show();
-                }
+                ParseUser.logInInBackground(user, pass, new LogInCallback() {
+                    public void done(ParseUser user, ParseException e) {
+                        if (user != null) {
+                            Toast.makeText(getApplicationContext(), "Inicio exitoso!", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(LoginActivity.this, MapActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Usuario o clave erróneo", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+                break;
             }
-        });
+            case R.id.tvRegister:
+            {
+                Intent signUpScreen = new Intent(LoginActivity.this, SignupActivity.class);
+                startActivity(signUpScreen);
+                break;
+            }
+
+        }
+
+
 
 
 
