@@ -115,7 +115,8 @@
         android:textStyle="normal|bold"
         android:textColor="#424242"
         android:layout_marginTop="10dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        />
 
     <EditText
         android:id="@+id/et_signupAge"

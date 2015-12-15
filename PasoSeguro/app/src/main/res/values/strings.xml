@@ -14,6 +14,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="nav_item_profile">Perfil</string>
+    <string name="nav_item_my_cases">Mis casos</string>
     <string name="nav_item_alarm">Activar Alarma</string>
     <string name="nav_item_custom_filter">Filtro Personalizado</string>
     <string name="nav_item_danger">Zonas Peligrosas</string>
@@ -21,4 +22,5 @@
     <string name="fast_filter_item_semana">Semana</string>
     <string name="fast_filter_item_mes">Mes</string>
     <string name="fast_filter_item_anio">Año</string>
+
 </resources>

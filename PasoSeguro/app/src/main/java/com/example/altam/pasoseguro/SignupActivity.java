@@ -57,7 +57,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
         pUser.setEmail(email);
         pUser.put("age", age);
 
-        if(user.matches("") || pass.matches("") || email.matches("") || pass2.matches("") || age.matches("") ){
+        if(user.matches("") || pass.matches("") || email.matches("") || pass2.matches("") || age.matches("")  ){
             Toast.makeText(getApplicationContext(), "Debes llenar todos los campos", Toast.LENGTH_LONG).show();
         }else if(!pass.equals(pass2)){
             Toast.makeText(getApplicationContext(),"Las contraseñas no son iguales"  , Toast.LENGTH_LONG).show();
@@ -69,7 +69,7 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                         Intent intent = new Intent(SignupActivity.this, MapActivity.class);
                         startActivity(intent);
                     } else {
-
+                        Toast.makeText(getApplicationContext(),e.getMessage(), Toast.LENGTH_LONG).show();
                         if(e.getMessage().equals("invalid email address")){
                             Toast.makeText(getApplicationContext(),"Email no valido", Toast.LENGTH_LONG).show();
                         }

@@ -7,6 +7,10 @@
             android:icon="@drawable/ic_profile"
             android:title="@string/nav_item_profile" />
         <item
+            android:id="@+id/navigation_item_my_cases"
+            android:icon="@drawable/ic_profile"
+            android:title="@string/nav_item_my_cases" />
+        <item
             android:id="@+id/navigation_item_alarm"
             android:icon="@drawable/ic_alarm"
             android:title="@string/nav_item_alarm" />
