@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MapActivity">
+    <!--<item android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"/>-->
+    <item android:id="@+id/action_filter"
+        android:title="@string/action_settings"
+        android:icon="@drawable/ic_action_filter"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom">
+        <menu>
+            <!--<item
+                android:icon="@android:drawable/ic_menu_directions"
+                android:orderInCategory="1"
+                android:title="Año" />-->
+
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/fast_filter_item_semana"
+                    android:checked="true"
+                    android:title="@string/fast_filter_item_semana" />
+                <item
+                    android:id="@+id/fast_filter_item_mes"
+                    android:title="@string/fast_filter_item_mes" />
+                <item
+                    android:id="@+id/fast_filter_item_anio"
+                    android:title="@string/fast_filter_item_anio" />
+            </group>
+        </menu>
+    </item>
+</menu>
