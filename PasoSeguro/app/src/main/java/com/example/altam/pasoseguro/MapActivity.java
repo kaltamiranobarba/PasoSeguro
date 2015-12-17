@@ -1,5 +1,6 @@
 package com.example.altam.pasoseguro;
 
+import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.support.design.widget.NavigationView;
@@ -24,12 +25,15 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.ParseUser;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private DrawerLayout mDrawerLayout;
     private TextView drawerText;
+    private Bundle extras;
+    private String user, pass, email, age;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -40,6 +44,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_final);
+        extras = getIntent().getExtras();
+        if(extras!=null){
+            this.user = extras.getString("user");
+        }
 
         //mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -53,19 +61,40 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-                menuItem.setChecked(true);
+
+
+
+                    menuItem.setChecked(true);
+
+
+
+
+
                 mDrawerLayout.closeDrawers();
-                Toast.makeText(MapActivity.this, menuItem.getTitle(), Toast.LENGTH_LONG).show();
+                switch (menuItem.getItemId()){
+                    case R.id.navigation_item_logout:
+                        ParseUser currentUser = ParseUser.getCurrentUser();
+                        currentUser.logOut();
+                        Toast.makeText(MapActivity.this, "Sesión finalizada", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(MapActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    break;
+                    case R.id.navigation_item_profile:
+                        Toast.makeText(MapActivity.this, "MY PROFILE", Toast.LENGTH_LONG).show();
+                    break;
+                }
+
+
                 return true;
             }
         });
 
         drawerText = (TextView) findViewById(R.id.drawer_header_textview);
-        drawerText.setText("joseromero");
+        drawerText.setText(user);
 
 
         /*setSupportActionBar(mToolbar);

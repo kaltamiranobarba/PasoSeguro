@@ -55,6 +55,10 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                 email = et_signupEmail.getText().toString();
                 age = et_signupAge.getText().toString();
                 pass2 = et_signupPass2.getText().toString();
+
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                currentUser.logOut();
+
                 ParseUser pUser = new ParseUser();
                 pUser.setUsername(user);
                 pUser.setPassword(pass);
@@ -68,15 +72,13 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                 } else {
                     pUser.signUpInBackground(new SignUpCallback() {
                         public void done(ParseException e) {
-                            if (e == null) {
-                                Toast.makeText(getApplicationContext(), "tUsuario registrado!", Toast.LENGTH_LONG).show();
-                                et_signupUser.setText("");
-                                et_signupPass.setText("");
-                                et_signupEmail.setText("");
-                                et_signupAge.setText("");
-                                et_signupPass2.setText("");
-                            } else {
 
+                            if (e == null) {
+                                Toast.makeText(getApplicationContext(), "Usuario registrado!",Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(SignupActivity.this, MapActivity.class);
+                                intent.putExtra("user",user);
+                                startActivity(intent);
+                            } else {
                                 if (e.getMessage().equals("invalid email address")) {
                                     Toast.makeText(getApplicationContext(), "Email no valido", Toast.LENGTH_LONG).show();
                                 }

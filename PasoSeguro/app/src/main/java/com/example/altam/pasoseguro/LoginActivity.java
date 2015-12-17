@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.parse.*;
 
+import java.io.Serializable;
+
 public class LoginActivity extends Activity implements View.OnClickListener {
     Button btn_loginEnter;
     EditText et_loginUser, et_loginPass;
@@ -43,19 +45,20 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
+
+
         switch (v.getId()) {
             case R.id.btn_loginEnter:
             {
-                String user, pass;
+                final String user, pass;
                 user = et_loginUser.getText().toString();
                 pass= et_loginPass.getText().toString();
-
-
                 ParseUser.logInInBackground(user, pass, new LogInCallback() {
-                    public void done(ParseUser user, ParseException e) {
-                        if (user != null) {
+                    public void done(ParseUser u, ParseException e) {
+                        if (u != null) {
                             Toast.makeText(getApplicationContext(), "Inicio exitoso!", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(LoginActivity.this, MapActivity.class);
+                            intent.putExtra("user", user);
                             startActivity(intent);
                         } else {
                             Toast.makeText(getApplicationContext(), "Usuario o clave erróneo", Toast.LENGTH_LONG).show();
