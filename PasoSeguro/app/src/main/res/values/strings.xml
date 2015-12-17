@@ -11,6 +11,7 @@
     <string name="defaultuser">Usuario</string>
     <string name="defaultpassword">Contraseña</string>
     <string name="registrate"><u>¿Eres nuev@? Registrate</u>.</string>
+    <string name="backlogin"><u>¿Ya eres miembr@? Ingresa</u>.</string>
 
     <string name="action_settings">Settings</string>
     <string name="nav_item_profile">Perfil</string>
