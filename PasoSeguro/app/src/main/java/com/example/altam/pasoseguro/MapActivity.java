@@ -24,8 +24,26 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.FindCallback;
+import com.parse.Parse;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.ParseException;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Hashtable;
+import java.util.List;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -39,6 +57,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    private List<ParseObject> allObjects;
+
+    private Hashtable<String, Marker> markers = new Hashtable<String, Marker>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +69,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if(extras!=null){
             this.user = extras.getString("user");
         }
+
+
 
         //mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -65,15 +88,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-
-
-
-                    menuItem.setChecked(true);
-
-
-
-
-
+                menuItem.setChecked(true);
                 mDrawerLayout.closeDrawers();
                 switch (menuItem.getItemId()){
                     case R.id.navigation_item_logout:
@@ -87,8 +102,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         Toast.makeText(MapActivity.this, "MY PROFILE", Toast.LENGTH_LONG).show();
                     break;
                 }
-
-
                 return true;
             }
         });
@@ -107,6 +120,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+
+
     }
 
 
@@ -132,6 +148,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 return true;
             case R.id.fast_filter_item_anio:
                 item.setChecked(true);
+                Toast.makeText(getApplicationContext(),  "Año", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.fast_filter_item_mes:
                 item.setChecked(true);
@@ -158,7 +175,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
-
+        getCases();
 
         Toast.makeText(getApplicationContext(),  "Buscando tu ubicación...", Toast.LENGTH_LONG).show();
 
@@ -167,8 +184,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onMyLocationChange(Location location) {
                 // TODO Auto-generated method stub
-               LatLng gye = new LatLng(location.getLatitude(),location.getLongitude());
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(gye,16));
+                LatLng gye = new LatLng(location.getLatitude(), location.getLongitude());
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(gye, 16));
             }
         });
 
@@ -213,4 +230,50 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
     }
+
+    public void getCases(){
+        double lat, lng;
+        allObjects = new ArrayList<ParseObject>();
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Cases");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if (e == null) {
+                    for(ParseObject o : list){
+                        double lat = o.getParseGeoPoint("location").getLatitude();
+                        double lng = o.getParseGeoPoint("location").getLongitude();
+                        String des = o.getString("description");
+                        String id = o.getObjectId();
+                        JSONArray types = o.getJSONArray("types");
+                        String title="";
+                        Date d = o.getCreatedAt();
+                        DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                        String rd = df.format(d);
+
+                        try {
+                            for (int i = 0; i < types.length(); i++) {
+                                title = title.concat(" " + types.getString(i));
+                            }
+                        }catch (JSONException e1) {
+                                e1.printStackTrace();
+                        }
+                        Marker tmp = mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(lat, lng))
+                                .title(title)
+                                .snippet(des));
+                        markers.put(id, tmp);
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "ERROR CONSIGUIENDO LA INFORMACIÓN", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+    }
+
+    private void setMarkersThisMonth(){
+
+    }
+
 }

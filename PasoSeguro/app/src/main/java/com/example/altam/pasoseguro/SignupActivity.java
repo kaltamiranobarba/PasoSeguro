@@ -81,6 +81,8 @@ public class SignupActivity extends Activity implements View.OnClickListener {
                             } else {
                                 if (e.getMessage().equals("invalid email address")) {
                                     Toast.makeText(getApplicationContext(), "Email no valido", Toast.LENGTH_LONG).show();
+                                }else {
+                                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                                 }
 
                             }

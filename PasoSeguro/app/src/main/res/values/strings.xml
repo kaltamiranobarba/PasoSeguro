@@ -23,5 +23,6 @@
     <string name="fast_filter_item_semana">Semana</string>
     <string name="fast_filter_item_mes">Mes</string>
     <string name="fast_filter_item_anio">Año</string>
+    <string name="title_activity_case_map">Map</string>
 
 </resources>
