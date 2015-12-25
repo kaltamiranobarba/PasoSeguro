@@ -1,7 +1,10 @@
 package com.example.altam.pasoseguro;
 
+import android.content.Context;
 import android.content.Intent;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.support.design.widget.NavigationView;
 import android.os.Bundle;
@@ -23,6 +26,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -176,20 +180,38 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
         getCases();
-
+        boolean tmp = true;
         Toast.makeText(getApplicationContext(),  "Buscando tu ubicación...", Toast.LENGTH_LONG).show();
+
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String provider = locationManager.getBestProvider(criteria, true);
+        Location myLocation = locationManager.getLastKnownLocation(provider);
+        double latitude = myLocation.getLatitude();
+
+        // Get longitude of the current location
+        double longitude = myLocation.getLongitude();
+
+        LatLng gye = new LatLng(latitude,longitude);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 16));
+
 
         mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
 
             @Override
             public void onMyLocationChange(Location location) {
                 // TODO Auto-generated method stub
-                LatLng gye = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(gye, 16));
+
+
+
+
             }
         });
 
     }
+
+
 
     @Override
     public void onStart() {
@@ -261,19 +283,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         Marker tmp = mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(lat, lng))
                                 .title(title)
-                                .snippet(des));
+                                .snippet(des)
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.board)));
                         markers.put(id, tmp);
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), "ERROR CONSIGUIENDO LA INFORMACIÓN", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
             }
         });
     }
 
-    private void setMarkersThisMonth(){
-
-    }
 
 }
