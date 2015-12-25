@@ -6,6 +6,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
@@ -15,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,10 +58,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private TextView drawerText;
     private Bundle extras;
     private String user, pass, email, age;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+    private FloatingActionButton fab;
     private GoogleApiClient client;
     private List<ParseObject> allObjects;
 
@@ -87,6 +86,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         //UiSettings.setMyLocationButtonEnabled(false);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MapActivity.this, CaseMapActivity.class);
+                startActivity(i);
+            }
+        });
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -95,12 +102,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 menuItem.setChecked(true);
                 mDrawerLayout.closeDrawers();
                 switch (menuItem.getItemId()){
+
+                    case R.id.navigation_item_my_cases:
+                        Intent intent = new Intent(MapActivity.this, MyCasesActivity.class);
+                        intent.putExtra("user",user);
+                        startActivity(intent);
+                    break;
                     case R.id.navigation_item_logout:
                         ParseUser currentUser = ParseUser.getCurrentUser();
                         currentUser.logOut();
                         Toast.makeText(MapActivity.this, "Sesión finalizada", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(MapActivity.this, LoginActivity.class);
-                        startActivity(intent);
+                        Intent intent2 = new Intent(MapActivity.this, LoginActivity.class);
+                        startActivity(intent2);
                     break;
                     case R.id.navigation_item_profile:
                         Toast.makeText(MapActivity.this, "MY PROFILE", Toast.LENGTH_LONG).show();

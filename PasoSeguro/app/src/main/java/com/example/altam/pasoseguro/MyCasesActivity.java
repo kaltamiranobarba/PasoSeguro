@@ -22,14 +22,14 @@ import java.util.List;
 public class MyCasesActivity extends AppCompatActivity {
     ListView lv_myCases;
     public   ArrayList<String>  al;
-
+    String user;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_cases);
-
+        user = getIntent().getExtras().getString("user");
 
         lv_myCases = (ListView) findViewById(R.id.lv_myCases);
         al = new ArrayList<String>();
@@ -51,7 +51,7 @@ public class MyCasesActivity extends AppCompatActivity {
     private void getMyCases(){
         List<ParseObject> li;
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Cases");
-        query.whereEqualTo("user", "test");
+        query.whereEqualTo("user",user);
        query.orderByDescending("createdAt");
 
         try {
