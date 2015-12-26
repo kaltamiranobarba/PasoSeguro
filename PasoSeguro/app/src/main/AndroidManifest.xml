@@ -20,9 +20,12 @@
         <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
         <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-        <meta-data
+		<meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <!--<meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA9UudTlPJPTYOYil1ztwEjOantIs91BOE" />-->
         <meta-data
             android:name="com.parse.APPLICATION_ID"
             android:value="gtUrodDDuFstbcyGN9gkyBGTDliHmtk5ADsMzGjH" />

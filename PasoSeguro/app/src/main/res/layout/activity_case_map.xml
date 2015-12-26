@@ -1,13 +1,15 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:id="@+id/sv_container">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
 <TextView
+    android:id="@+id/tv_selecciona"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text="Selecciona un punto en el mapa y continua"/>
@@ -19,39 +21,76 @@
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="250dp"
-    tools:context="com.example.altam.pasoseguro.CaseMapActivity" />
+    tools:context="com.example.altam.pasoseguro.CaseMapActivity"
+    android:layout_below="@+id/tv_selecciona" />
 
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:id="@+id/transparent_image"
+        android:layout_below="@+id/tv_selecciona"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@color/transparent_white"
+        android:alpha="0" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:inputType="textMultiLine"
         android:ems="10"
-        android:id="@+id/editText"
+        android:id="@+id/txtDescripcion"
         android:hint="descripcion"
-        />
+        android:layout_below="@+id/map" />
 
 
 
     <CheckBox
+        android:id="@+id/checkPiropos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Piropos"/>
+        android:text="Piropos"
+        android:layout_below="@+id/txtDescripcion"/>
     <CheckBox
+        android:id="@+id/checkContacto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Contacto"/>
+        android:text="Contacto"
+        android:layout_below="@+id/checkPiropos"/>
     <CheckBox
+        android:id="@+id/checkSilbidos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Silbidos"/>
+        android:text="Silbidos"
+        android:layout_below="@+id/checkContacto"/>
+
     <CheckBox
+        android:id="@+id/checkMiradas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Miradas"/>
+        android:text="Miradas"
+        android:layout_below="@+id/checkSilbidos"/>
     <Button
+        android:id="@+id/btnSiguiente"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Siguiente"/>
-    </LinearLayout>
+        android:text="Siguiente"
+        android:layout_below="@+id/checkMiradas"/>
+
+    <!--<Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Test Button 1"
+        android:id="@+id/button"
+        android:layout_below="@+id/btnSiguiente"/>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Test Button 2"
+        android:id="@+id/button2"
+        android:layout_below="@+id/button" />-->
+
+</RelativeLayout>
 </ScrollView>
