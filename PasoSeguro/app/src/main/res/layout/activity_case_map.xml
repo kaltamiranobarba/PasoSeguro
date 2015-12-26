@@ -8,11 +8,20 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
+
+
 <TextView
     android:id="@+id/tv_selecciona"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text="Selecciona un punto en el mapa y continua"/>
+    <EditText
+        android:id="@+id/txtTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Título"
+        android:layout_below="@+id/map"
+        />
 
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
@@ -34,6 +43,8 @@
         android:layout_alignParentStart="true"
         android:src="@color/transparent_white"
         android:alpha="0" />
+
+
 
     <EditText
         android:layout_width="match_parent"
@@ -72,25 +83,12 @@
         android:text="Miradas"
         android:layout_below="@+id/checkSilbidos"/>
     <Button
-        android:id="@+id/btnSiguiente"
+        android:id="@+id/btnGuardar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Siguiente"
+        android:text="Guardar"
         android:layout_below="@+id/checkMiradas"/>
 
-    <!--<Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Test Button 1"
-        android:id="@+id/button"
-        android:layout_below="@+id/btnSiguiente"/>
-
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Test Button 2"
-        android:id="@+id/button2"
-        android:layout_below="@+id/button" />-->
 
 </RelativeLayout>
 </ScrollView>

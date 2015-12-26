@@ -14,6 +14,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class MyCasesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_cases);
-        user = getIntent().getExtras().getString("user");
+        user = ParseUser.getCurrentUser().getUsername();
 
         lv_myCases = (ListView) findViewById(R.id.lv_myCases);
         al = new ArrayList<String>();
@@ -52,7 +53,7 @@ public class MyCasesActivity extends AppCompatActivity {
         List<ParseObject> li;
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Cases");
         query.whereEqualTo("user",user);
-       query.orderByDescending("createdAt");
+        query.orderByDescending("createdAt");
 
         try {
             li = query.find();

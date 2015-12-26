@@ -105,7 +105,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                     case R.id.navigation_item_my_cases:
                         Intent intent = new Intent(MapActivity.this, MyCasesActivity.class);
-                        intent.putExtra("user",user);
                         startActivity(intent);
                     break;
                     case R.id.navigation_item_logout:
@@ -193,7 +192,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
         getCases();
-        boolean tmp = true;
+
         Toast.makeText(getApplicationContext(),  "Buscando tu ubicación...", Toast.LENGTH_LONG).show();
 
 
@@ -210,17 +209,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 16));
 
 
-        mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-
-            @Override
-            public void onMyLocationChange(Location location) {
-                // TODO Auto-generated method stub
-
-
-
-
-            }
-        });
 
     }
 
@@ -271,6 +259,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         allObjects = new ArrayList<ParseObject>();
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Cases");
+        query.whereExists("location");
+
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
@@ -281,7 +271,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         String des = o.getString("description");
                         String id = o.getObjectId();
                         JSONArray types = o.getJSONArray("types");
-                        String title="";
+                        String title=" ";
                         Date d = o.getCreatedAt();
                         DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
                         String rd = df.format(d);
