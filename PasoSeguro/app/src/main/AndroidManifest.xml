@@ -69,26 +69,37 @@
 
         <activity
             android:name=".CaseMapActivity"
-            android:label="@string/title_activity_case_map">
+            android:label="Registrar Caso">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MapActivity" />
         </activity>
-        <activity android:name=".MyCasesActivity">
+        <activity android:name=".MyCasesActivity"
+            android:label="Mis Casos">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MapActivity" />
         </activity>
-        <activity android:name=".CaseActivity">
+        <activity android:name=".CaseActivity"
+                android:label="Mis Casos">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MyCasesActivity" />
         </activity>
     </application>
 

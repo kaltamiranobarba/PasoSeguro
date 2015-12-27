@@ -8,6 +8,9 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -32,7 +35,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class CaseMapActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener{
+public class CaseMapActivity extends  AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener{
 
     ScrollView mainScrollView;
     ImageView transparentImageView;
@@ -49,6 +52,11 @@ public class CaseMapActivity extends FragmentActivity implements OnMapReadyCallb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_case_map);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         mainScrollView = (ScrollView) findViewById(R.id.sv_container);
         transparentImageView = (ImageView) findViewById(R.id.transparent_image);

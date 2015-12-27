@@ -3,57 +3,100 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.altam.pasoseguro.CaseActivity"
     android:orientation="vertical">
 
-    <EditText
-    android:id="@+id/et_caseTitle"
-    android:layout_width="match_parent"
-    android:layout_height="150dp"
-        android:hint="titulo"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorAccent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
     />
 
-    <EditText
-        android:id="@+id/et_caseDescription"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:hint="descripcion"
-    />
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Piropos"/>
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Contacto"/>
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Silbidos"/>
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Miradas"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Siguiente"/>
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:orientation="vertical">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Actualizar"
-        />
+        <!-- Tittle Label -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_marginBottom="8dp">
+            <EditText android:id="@+id/et_caseTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Titulo"/>
+        </android.support.design.widget.TextInputLayout>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Eliminar"
-        />
+        <!-- Description Label -->
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            android:layout_marginBottom="8dp">
+            <EditText android:id="@+id/et_caseDescription"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Descripción"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Piropos"/>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contacto"/>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Silbidos"/>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Miradas"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_siguiente"
+            android:text="Siguiente"
+            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:textColor="#000"
+            android:textSize="14dp"
+            android:typeface="sans"
+            android:background="#FF4081"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_actualizar"
+            android:text="Actualizar"
+            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:textColor="#000"
+            android:textSize="14dp"
+            android:typeface="sans"
+            android:background="#FF4081"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_eliminar"
+            android:text="Eliminar"
+            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:textColor="#000"
+            android:textSize="14dp"
+            android:typeface="sans"
+            android:background="#FF4081"/>
+
+    </LinearLayout>
 
 </LinearLayout>
