@@ -24,5 +24,6 @@
     <string name="fast_filter_item_mes">Mes</string>
     <string name="fast_filter_item_anio">Año</string>
     <string name="title_activity_case_map">Map</string>
+    <string name="title_activity_my_cases">Map</string>
 
 </resources>

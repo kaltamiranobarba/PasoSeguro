@@ -155,7 +155,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         switch (id) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
@@ -164,16 +163,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 return true;
             case R.id.fast_filter_item_anio:
                 item.setChecked(true);
-                Toast.makeText(getApplicationContext(),  "Año", Toast.LENGTH_LONG).show();
+                getCases(1);
+                Toast.makeText(getApplicationContext(),"Reportes de este año", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.fast_filter_item_mes:
                 item.setChecked(true);
+                getCases(2);
+                Toast.makeText(getApplicationContext(),"Reportes de este mes", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.fast_filter_item_semana:
                 item.setChecked(true);
+                getCases(3);
+                Toast.makeText(getApplicationContext(),"Reportes de esta semana", Toast.LENGTH_LONG).show();
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -191,24 +194,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
-        getCases();
+
 
         Toast.makeText(getApplicationContext(),  "Buscando tu ubicación...", Toast.LENGTH_LONG).show();
 
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_LOW);
         String provider = locationManager.getBestProvider(criteria, true);
         Location myLocation = locationManager.getLastKnownLocation(provider);
         double latitude = myLocation.getLatitude();
 
         // Get longitude of the current location
         double longitude = myLocation.getLongitude();
-
         LatLng gye = new LatLng(latitude,longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 16));
-
-
 
     }
 
@@ -254,12 +255,33 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         client.disconnect();
     }
 
-    public void getCases(){
+
+
+
+    public void getCases(int mode){
         double lat, lng;
         allObjects = new ArrayList<ParseObject>();
 
+        Calendar c = Calendar.getInstance();
+        int cYear = c.get(Calendar.YEAR);
+        int cMonth = c.get(Calendar.MONTH);
+        int cWeek = c.get(Calendar.WEEK_OF_YEAR);
+
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Cases");
         query.whereExists("location");
+        switch (mode){
+            case 1:
+                query.whereEqualTo("year",cYear);
+                break;
+            case 2:
+                query.whereEqualTo("month",cMonth);
+                query.whereEqualTo("year",cYear);
+                break;
+            case 3:
+                query.whereEqualTo("year",cYear);
+                query.whereEqualTo("week",cWeek);
+                break;
+        }
 
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -269,12 +291,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         double lat = o.getParseGeoPoint("location").getLatitude();
                         double lng = o.getParseGeoPoint("location").getLongitude();
                         String des = o.getString("description");
+
+                        String userCase = o.getString("user");
+                        String p = userCase+" vivió:";
+
                         String id = o.getObjectId();
                         JSONArray types = o.getJSONArray("types");
                         String title=" ";
-                        Date d = o.getCreatedAt();
-                        DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-                        String rd = df.format(d);
 
                         try {
                             for (int i = 0; i < types.length(); i++) {
@@ -285,10 +308,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         }
                         Marker tmp = mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(lat, lng))
-                                .title(title)
-                                .snippet(des)
+                                .title(p)
+                                .snippet(title)
                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.board)));
-                        markers.put(id, tmp);
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();

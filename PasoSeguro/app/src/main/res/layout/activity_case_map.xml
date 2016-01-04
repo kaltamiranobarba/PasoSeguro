@@ -69,7 +69,7 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:id="@+id/inputDescription"
-                android:layout_height="75dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/inputTitle">
                 <EditText android:id="@+id/txtDescripcion"
                     android:layout_width="match_parent"
@@ -79,17 +79,17 @@
             </android.support.design.widget.TextInputLayout>
 
             <CheckBox
-                android:id="@+id/checkPiropos"
+                android:id="@+id/checkAbusoVerbal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Piropos"
+                android:text="Abuso Verbal"
                 android:layout_below="@+id/inputDescription"/>
             <CheckBox
                 android:id="@+id/checkContacto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Contacto"
-                android:layout_below="@+id/checkPiropos"/>
+                android:layout_below="@+id/checkAbusoVerbal"/>
             <CheckBox
                 android:id="@+id/checkSilbidos"
                 android:layout_width="wrap_content"
@@ -104,6 +104,29 @@
                 android:text="Miradas"
                 android:layout_below="@+id/checkSilbidos"/>
 
+            <CheckBox
+                android:id="@+id/checkExposicion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Exposición genital"
+                android:layout_below="@+id/checkMiradas"/>
+
+
+
+            <CheckBox
+                android:id="@+id/checkInsinuacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Insinuaciones"
+                android:layout_below="@+id/checkExposicion"/>
+
+            <CheckBox
+                android:id="@+id/checkGestos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gestos"
+                android:layout_below="@+id/checkInsinuacion"/>
+
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btnGuardar"
                 android:text="Guardar"
@@ -114,7 +137,7 @@
                 android:textSize="14dp"
                 android:typeface="sans"
                 android:background="#FF4081"
-                android:layout_below="@+id/checkMiradas"
+                android:layout_below="@+id/checkGestos"
                 />
 
         </RelativeLayout>

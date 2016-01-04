@@ -34,6 +34,7 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
 public class CaseMapActivity extends  AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener{
 
@@ -44,7 +45,7 @@ public class CaseMapActivity extends  AppCompatActivity implements OnMapReadyCal
     String title, description, user;
     Button btnGuardar;
     double lat, lng;
-    CheckBox checkPiropos, checkSilbidos, checkContacto, checkMiradas;
+    CheckBox checkAbusoVerbal, checkSilbidos, checkContacto, checkMiradas, checkInsinuacion, checkExposicion, checkGestos;
     ArrayList<String> types = new ArrayList<String>();
 
 
@@ -60,25 +61,27 @@ public class CaseMapActivity extends  AppCompatActivity implements OnMapReadyCal
 
         mainScrollView = (ScrollView) findViewById(R.id.sv_container);
         transparentImageView = (ImageView) findViewById(R.id.transparent_image);
-        txtTitle = (EditText) findViewById(R.id.txtTitle);
-        txtDescription = (EditText) findViewById(R.id.txtDescripcion);
+
 
         checkContacto = (CheckBox) findViewById(R.id.checkContacto);
-        checkPiropos = (CheckBox) findViewById(R.id.checkPiropos);
+        checkAbusoVerbal = (CheckBox) findViewById(R.id.checkAbusoVerbal);
         checkSilbidos = (CheckBox) findViewById(R.id.checkSilbidos);
         checkMiradas = (CheckBox) findViewById(R.id.checkMiradas);
+        checkExposicion = (CheckBox) findViewById(R.id.checkExposicion);
+
+        checkInsinuacion = (CheckBox) findViewById(R.id.checkInsinuacion);
+        checkGestos = (CheckBox) findViewById(R.id.checkGestos);
 
         btnGuardar = (Button) findViewById(R.id.btnGuardar);
 
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                title = txtTitle.getText().toString();
-                description = txtDescription.getText().toString();
+
                 ParseUser puser = ParseUser.getCurrentUser();
                 user = puser.getString("username");
                 getTypes();
-                addCase(title, description,user,lat,lng,types);
+                addCase("prueba",lat,lng,types);
 
                 Intent i = new Intent(CaseMapActivity.this, MapActivity.class );
                 startActivity(i);
@@ -125,20 +128,34 @@ public class CaseMapActivity extends  AppCompatActivity implements OnMapReadyCal
             types.add(checkContacto.getText().toString());
         if(checkMiradas.isChecked())
             types.add(checkMiradas.getText().toString());
-        if(checkPiropos.isChecked())
-            types.add(checkPiropos.getText().toString());
+        if(checkAbusoVerbal.isChecked())
+            types.add(checkAbusoVerbal.getText().toString());
         if(checkSilbidos.isChecked())
             types.add(checkSilbidos.getText().toString());
+        if(checkExposicion.isChecked())
+            types.add(checkExposicion.getText().toString());
+        if(checkInsinuacion.isChecked())
+            types.add(checkInsinuacion.getText().toString());
+        if(checkGestos.isChecked())
+            types.add(checkGestos.getText().toString());
+
     }
 
 
-    public void addCase(String title, String description, String user, double lat, double lng, ArrayList<String> types){
+    public void addCase(String user, double lat, double lng, ArrayList<String> types){
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH)+1;
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int week = c.get(Calendar.WEEK_OF_YEAR);
         ParseObject po = new ParseObject("Cases");
-        po.put("title", title);
-        po.put("description",description);
         po.put("user",user);
         po.put("location", new ParseGeoPoint(lat,lng));
         po.put("types", types);
+        po.put("year",year);
+        po.put("month",month);
+        po.put("day",day);
+        po.put("week", week);
         po.saveInBackground();
         Toast.makeText(CaseMapActivity.this, "Historia registrada", Toast.LENGTH_LONG).show();
     }
@@ -158,13 +175,17 @@ public class CaseMapActivity extends  AppCompatActivity implements OnMapReadyCal
         Criteria criteria = new Criteria();
         String provider = locationManager.getBestProvider(criteria, true);
         Location myLocation = locationManager.getLastKnownLocation(provider);
-        double latitude = myLocation.getLatitude();
+        lat = myLocation.getLatitude();
 
         // Get longitude of the current location
-        double longitude = myLocation.getLongitude();
+        lng = myLocation.getLongitude();
 
-        LatLng gye = new LatLng(latitude,longitude);
+        LatLng gye = new LatLng(lat,lng);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 14));
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(lat, lng))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.board))
+        );
     }
 
 
@@ -176,7 +197,5 @@ public class CaseMapActivity extends  AppCompatActivity implements OnMapReadyCal
         Marker tmp = mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(lat, lng))
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.board)));
-
-
     }
 }
