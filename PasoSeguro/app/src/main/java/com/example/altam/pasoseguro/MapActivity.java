@@ -57,21 +57,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private DrawerLayout mDrawerLayout;
     private TextView drawerText;
     private Bundle extras;
-    private String user, pass, email, age;
+    private String user;
     private FloatingActionButton fab;
     private GoogleApiClient client;
     private List<ParseObject> allObjects;
 
-    private Hashtable<String, Marker> markers = new Hashtable<String, Marker>();
+
+    int yearF, dayF, monthF, yearT, dayT, monthT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_final);
-        extras = getIntent().getExtras();
-        if(extras!=null){
-            this.user = extras.getString("user");
-        }
+
+        ParseUser puser = ParseUser.getCurrentUser();
+        this.user = puser.getString("username");
 
 
 
@@ -198,11 +198,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
-
-
         Toast.makeText(getApplicationContext(),  "Buscando tu ubicación...", Toast.LENGTH_LONG).show();
-
-
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_LOW);
@@ -215,6 +211,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         LatLng gye = new LatLng(latitude,longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 16));
 
+        /*
+        extras = getIntent().getExtras();
+        if(extras!=null){
+            yearF = extras.getInt("yearF");
+            monthF = extras.getInt("montF");
+            dayF = extras.getInt("dayF");
+            yearT = extras.getInt("yearT");
+            monthT = extras.getInt("montT");
+            dayT = extras.getInt("dayT");
+            getCases(4);
+        }
+        */
     }
 
 
@@ -259,7 +267,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         client.disconnect();
     }
 
+    public void getCasesYear(){
 
+    }
 
 
     public void getCases(int mode){
@@ -268,9 +278,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         Calendar c = Calendar.getInstance();
         int cYear = c.get(Calendar.YEAR);
-        int cMonth = c.get(Calendar.MONTH);
+        int cMonth = c.get(Calendar.MONTH)+1;
         int cWeek = c.get(Calendar.WEEK_OF_YEAR);
-
+        mMap.clear();;
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Cases");
         query.whereExists("location");
         switch (mode){
@@ -285,6 +295,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 query.whereEqualTo("year",cYear);
                 query.whereEqualTo("week",cWeek);
                 break;
+            case 4:
+                query.whereGreaterThanOrEqualTo("year", yearF);
+
+                //query.whereGreaterThanOrEqualTo("month", monthF);
+                //query.whereGreaterThanOrEqualTo("day", dayF);
+                break;
         }
 
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -295,7 +311,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         double lat = o.getParseGeoPoint("location").getLatitude();
                         double lng = o.getParseGeoPoint("location").getLongitude();
                         String des = o.getString("description");
-
                         String userCase = o.getString("user");
                         String p = userCase+" vivió:";
 
@@ -310,6 +325,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         }catch (JSONException e1) {
                                 e1.printStackTrace();
                         }
+
                         Marker tmp = mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(lat, lng))
                                 .title(p)

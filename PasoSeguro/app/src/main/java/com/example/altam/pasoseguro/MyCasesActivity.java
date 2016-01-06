@@ -1,5 +1,9 @@
 package com.example.altam.pasoseguro;
 
+import android.content.Context;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -77,13 +81,20 @@ public class MyCasesActivity extends FragmentActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
         getCases();
+        mMap.setMyLocationEnabled(true);
 
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_LOW);
+        String provider = locationManager.getBestProvider(criteria, true);
+        Location myLocation = locationManager.getLastKnownLocation(provider);
+        double latitude = myLocation.getLatitude();
+
+        // Get longitude of the current location
+        double longitude = myLocation.getLongitude();
+        LatLng gye = new LatLng(latitude,longitude);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 16));
 
     }
 
@@ -91,10 +102,12 @@ public class MyCasesActivity extends FragmentActivity implements OnMapReadyCallb
     public void getCases() {
         double lat, lng;
         allObjects = new ArrayList<ParseObject>();
+        ParseUser puser = ParseUser.getCurrentUser();
+        this.user = puser.getString("username");
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Cases");
         query.whereExists("location");
-        query.whereEqualTo("user", "test");
+        query.whereEqualTo("user", this.user);
 
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -126,7 +139,7 @@ public class MyCasesActivity extends FragmentActivity implements OnMapReadyCallb
                                 .position(new LatLng(lat, lng))
                                 .title(p)
                                 .snippet(title)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.board)));
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.mboard)));
 
                     }
                 } else {

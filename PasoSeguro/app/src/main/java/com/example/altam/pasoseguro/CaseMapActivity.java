@@ -48,7 +48,6 @@ public class CaseMapActivity extends  AppCompatActivity implements OnMapReadyCal
     CheckBox checkAbusoVerbal, checkSilbidos, checkContacto, checkMiradas, checkInsinuacion, checkExposicion, checkGestos;
     ArrayList<String> types = new ArrayList<String>();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +67,6 @@ public class CaseMapActivity extends  AppCompatActivity implements OnMapReadyCal
         checkSilbidos = (CheckBox) findViewById(R.id.checkSilbidos);
         checkMiradas = (CheckBox) findViewById(R.id.checkMiradas);
         checkExposicion = (CheckBox) findViewById(R.id.checkExposicion);
-
         checkInsinuacion = (CheckBox) findViewById(R.id.checkInsinuacion);
         checkGestos = (CheckBox) findViewById(R.id.checkGestos);
 
@@ -138,7 +136,6 @@ public class CaseMapActivity extends  AppCompatActivity implements OnMapReadyCal
             types.add(checkInsinuacion.getText().toString());
         if(checkGestos.isChecked())
             types.add(checkGestos.getText().toString());
-
     }
 
 
