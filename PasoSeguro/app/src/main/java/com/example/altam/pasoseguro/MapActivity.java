@@ -118,6 +118,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     case R.id.navigation_item_profile:
                         Toast.makeText(MapActivity.this, "MY PROFILE", Toast.LENGTH_LONG).show();
                     break;
+                    case R.id.navigation_item_custom_filter:
+                        Intent intent3 = new Intent(MapActivity.this, CustomFilterActivity.class);
+                        startActivity(intent3);
+                    break;
                 }
                 return true;
             }
