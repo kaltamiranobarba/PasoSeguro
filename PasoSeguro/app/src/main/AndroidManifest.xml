@@ -16,16 +16,19 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <uses-permission android:name="android.permission.INTERNET" />
-        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
         <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+        <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
+        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+        <uses-permission android:name="android.permission.INTERNET" />
 
-		<meta-data
+        <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-        <!--<meta-data
+        <!--
+            <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA9UudTlPJPTYOYil1ztwEjOantIs91BOE" />-->
+            android:value="AIzaSyA9UudTlPJPTYOYil1ztwEjOantIs91BOE" />
+        -->
         <meta-data
             android:name="com.parse.APPLICATION_ID"
             android:value="gtUrodDDuFstbcyGN9gkyBGTDliHmtk5ADsMzGjH" />
@@ -67,28 +70,39 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".CaseDescriptionActivity" />
         <activity
             android:name=".CaseMapActivity"
-            android:label="@string/title_activity_case_map">
+            android:label="Registrar Caso">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MapActivity" />
         </activity>
-        <activity android:name=".MyCasesActivity">
+        <activity
+            android:name=".CaseActivity"
+            android:label="Mis Casos">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MyCasesActivity" />
         </activity>
-        <activity android:name=".CaseActivity">
+        <activity
+            android:name=".MyCasesActivity"
+            android:label="@string/title_activity_my_cases">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity

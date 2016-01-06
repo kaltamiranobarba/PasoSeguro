@@ -1,7 +1,10 @@
 package com.example.altam.pasoseguro;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.parse.ParseException;
@@ -18,6 +21,12 @@ public class CaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_case);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         et_caseTitle = (EditText) findViewById(R.id.et_caseTitle);
         et_caseDescription = (EditText) findViewById(R.id.et_caseDescription);
         extras = getIntent().getExtras();
@@ -29,6 +38,21 @@ public class CaseActivity extends AppCompatActivity {
         et_caseDescription.setText(description);
     }
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId()) {
+            case android.R.id.home: //hago un case por si en un futuro agrego mas opciones
+                //Log.i("ActionBar", "Atrás!");
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     public void getCaseInfo(){
         ParseObject po;
