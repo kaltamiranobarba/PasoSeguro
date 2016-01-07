@@ -167,16 +167,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 return true;
             case R.id.fast_filter_item_anio:
                 item.setChecked(true);
+                setTitle("Casos del Año");
                 getCases(1);
                 Toast.makeText(getApplicationContext(),"Reportes de este año", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.fast_filter_item_mes:
                 item.setChecked(true);
+                setTitle("Casos del Mes");
                 getCases(2);
                 Toast.makeText(getApplicationContext(),"Reportes de este mes", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.fast_filter_item_semana:
                 item.setChecked(true);
+                setTitle("Casos de la Semana");
                 getCases(3);
                 Toast.makeText(getApplicationContext(),"Reportes de esta semana", Toast.LENGTH_LONG).show();
                 return true;

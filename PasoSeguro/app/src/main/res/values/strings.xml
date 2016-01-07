@@ -3,7 +3,7 @@
     <string name="SName">Usuario</string>
     <string name="SPass">Clave</string>
     <string name="button_enter">Ingresar</string>
-    <string name="title_activity_map">Map</string>
+    <string name="title_activity_map">Casos de la Semana</string>
     <string name="title_activity_signup">SignupActivity</string>
     <string name="login">Iniciar sesión</string>
     <string name="signup">Registrarse</string>
@@ -24,6 +24,6 @@
     <string name="fast_filter_item_mes">Mes</string>
     <string name="fast_filter_item_anio">Año</string>
     <string name="title_activity_case_map">Map</string>
-    <string name="title_activity_my_cases">Map</string>
+    <string name="title_activity_my_cases">Mis Casos</string>
 
 </resources>

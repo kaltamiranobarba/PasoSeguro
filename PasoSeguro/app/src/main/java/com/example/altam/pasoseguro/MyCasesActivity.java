@@ -7,6 +7,11 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
@@ -38,7 +43,7 @@ import java.util.List;
 
 import static java.util.Calendar.*;
 
-public class MyCasesActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MyCasesActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private List<ParseObject> allObjects;
@@ -53,7 +58,14 @@ public class MyCasesActivity extends FragmentActivity implements OnMapReadyCallb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_cases);
+        setContentView(R.layout.activity_my_cases_final);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
