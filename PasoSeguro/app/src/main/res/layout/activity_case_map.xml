@@ -54,36 +54,12 @@
                 android:src="@color/transparent_white"
                 android:alpha="0" />
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:id="@+id/inputTitle"
-                android:layout_below="@+id/map">
-                <EditText android:id="@+id/txtTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Titulo"/>
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:id="@+id/inputDescription"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/inputTitle">
-                <EditText android:id="@+id/txtDescripcion"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:hint="Descripcion"
-                    />
-            </android.support.design.widget.TextInputLayout>
-
             <CheckBox
                 android:id="@+id/checkAbusoVerbal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Abuso Verbal"
-                android:layout_below="@+id/inputDescription"/>
+                android:layout_below="@+id/map" />
             <CheckBox
                 android:id="@+id/checkContacto"
                 android:layout_width="wrap_content"
