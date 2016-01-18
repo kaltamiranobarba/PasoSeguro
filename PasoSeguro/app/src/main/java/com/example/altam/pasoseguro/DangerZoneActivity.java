@@ -3,17 +3,25 @@ package com.example.altam.pasoseguro;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,6 +31,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.Parse;
@@ -48,15 +57,25 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
     private List<ParseObject> allObjects;
     private ArrayList<ParseGeoPoint> locations = new ArrayList<ParseGeoPoint>();
     private FloatingActionButton fab;
+    private DrawerLayout mDrawerLayout;
+    private TextView drawerText;
+    private String user;
+    private Bundle extras;
+    int yearF, dayF, monthF;
+    boolean alarmActivated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_danger_zone);
 
+        ParseUser puser = ParseUser.getCurrentUser();
+        this.user = puser.getString("username");
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
 
@@ -66,7 +85,7 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
         mapFragment.getMapAsync(this);
 
 
-
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +94,46 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
                 startActivity(i);
             }
         });
+
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                //menuItem.setChecked(true);
+                mDrawerLayout.closeDrawers();
+                switch (menuItem.getItemId()) {
+
+                    case R.id.navigation_item_my_cases:
+                        Intent intent = new Intent(DangerZoneActivity.this, MyCasesActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.navigation_item_logout:
+                        ParseUser currentUser = ParseUser.getCurrentUser();
+                        currentUser.logOut();
+                        Toast.makeText(DangerZoneActivity.this, "Sesión finalizada", Toast.LENGTH_LONG).show();
+                        Intent intent2 = new Intent(DangerZoneActivity.this, LoginActivity.class);
+                        startActivity(intent2);
+                        break;
+                    case R.id.navigation_item_profile:
+                        Toast.makeText(DangerZoneActivity.this, "MY PROFILE", Toast.LENGTH_LONG).show();
+                        break;
+                    case R.id.navigation_item_custom_filter:
+                        Intent intent3 = new Intent(DangerZoneActivity.this, CustomFilterActivity.class);
+                        startActivity(intent3);
+                        break;
+                    case R.id.navigation_item_danger:
+                        Intent intent4 = new Intent(DangerZoneActivity.this, DangerZoneActivity.class);
+                        startActivity(intent4);
+                        break;
+                }
+                return true;
+            }
+        });
+
+        drawerText = (TextView) findViewById(R.id.drawer_header_textview);
+        drawerText.setText(user);
+
+        alarmActivated = false;
     }
 
 
@@ -208,5 +267,150 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
                 count = 0;
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem alarmItem = menu.getItem(0);
+        if(alarmActivated == true) {
+            Drawable alarm = ContextCompat.getDrawable(this, R.drawable.ic_alarm);
+            alarmItem.setIcon(alarm);
+        } else {
+            Drawable alarmOff = ContextCompat.getDrawable(this, R.drawable.ic_alarm_off);
+            alarmItem.setIcon(alarmOff);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.action_alarm:
+                if(alarmActivated == true) {
+                    Drawable alarmOff = ContextCompat.getDrawable(this, R.drawable.ic_alarm_off);
+                    item.setIcon(alarmOff);
+                    alarmActivated = false;
+                    //SE DESACTIVO LA ALARMA
+                } else {
+                    Drawable alarm = ContextCompat.getDrawable(this, R.drawable.ic_alarm);
+                    item.setIcon(alarm);
+                    alarmActivated = true;
+                    //SE ACTIVO
+                }
+                return true;
+            case R.id.action_filter:
+                return true;
+            case R.id.fast_filter_item_anio:
+                item.setChecked(true);
+                setTitle("Reportes del Año");
+                getCases(1);
+                Toast.makeText(getApplicationContext(),"Reportes de este año", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.fast_filter_item_mes:
+                item.setChecked(true);
+                setTitle("Reportes del Mes");
+                getCases(2);
+                Toast.makeText(getApplicationContext(),"Reportes de este mes", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.fast_filter_item_semana:
+                item.setChecked(true);
+                setTitle("Reportes de la Semana");
+                getCases(3);
+                Toast.makeText(getApplicationContext(),"Reportes de esta semana", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.fast_filter_item_custom:
+                item.setChecked(true);
+                setTitle("Reportes personalizados");
+                extras = getIntent().getExtras();
+                if(extras!=null){
+                    yearF = extras.getInt("yearF");
+                    monthF = extras.getInt("montF");
+                    dayF = extras.getInt("dayF");
+                    getCases(4);
+                    Toast.makeText(getApplicationContext(),"Reportes personalizados", Toast.LENGTH_LONG).show();
+                    return true;
+                }else{
+                    Toast.makeText(getApplicationContext(),"No ha definido fecha", Toast.LENGTH_LONG).show();
+                }
+
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void getCases(int mode){
+        double lat, lng;
+        allObjects = new ArrayList<ParseObject>();
+
+        Calendar c = Calendar.getInstance();
+        int cYear = c.get(Calendar.YEAR);
+        int cMonth = c.get(Calendar.MONTH)+1;
+        int cWeek = c.get(Calendar.WEEK_OF_YEAR);
+        mMap.clear();;
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Cases");
+        query.whereExists("location");
+        switch (mode){
+            case 1:
+                query.whereEqualTo("year",cYear);
+                break;
+            case 2:
+                query.whereEqualTo("month",cMonth);
+                query.whereEqualTo("year",cYear);
+                break;
+            case 3:
+                query.whereEqualTo("year",cYear);
+                query.whereEqualTo("week",cWeek);
+                break;
+            case 4:
+                query.whereGreaterThanOrEqualTo("year", yearF);
+                query.whereGreaterThanOrEqualTo("month", monthF);
+                query.whereGreaterThanOrEqualTo("day",dayF);
+                break;
+        }
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if (e == null) {
+                    for(ParseObject o : list){
+                        double lat = o.getParseGeoPoint("location").getLatitude();
+                        double lng = o.getParseGeoPoint("location").getLongitude();
+                        String des = o.getString("description");
+                        String userCase = o.getString("user");
+                        String p = userCase+" vivió:";
+
+                        String id = o.getObjectId();
+                        JSONArray types = o.getJSONArray("types");
+                        String title=" ";
+
+                        try {
+                            for (int i = 0; i < types.length(); i++) {
+                                title = title.concat(" " + types.getString(i));
+                            }
+                        }catch (JSONException e1) {
+                            e1.printStackTrace();
+                        }
+
+                        Marker tmp = mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(lat, lng))
+                                .title(p)
+                                .snippet(title)
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.board)));
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
     }
 }

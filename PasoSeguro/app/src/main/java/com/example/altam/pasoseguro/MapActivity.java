@@ -2,6 +2,7 @@ package com.example.altam.pasoseguro;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -63,7 +65,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private GoogleApiClient client;
     private List<ParseObject> allObjects;
     final double latitude=0, longitude=0;
-
+    boolean alarmActivated;
     int yearF, dayF, monthF;
 
     @Override
@@ -146,7 +148,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-
+        alarmActivated = false;
 
     }
 
@@ -155,6 +157,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem alarmItem = menu.getItem(0);
+        if(alarmActivated == true) {
+            Drawable alarm = ContextCompat.getDrawable(this, R.drawable.ic_alarm);
+            alarmItem.setIcon(alarm);
+        } else {
+            Drawable alarmOff = ContextCompat.getDrawable(this, R.drawable.ic_alarm_off);
+            alarmItem.setIcon(alarmOff);
+        }
         return true;
     }
 
@@ -169,6 +179,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.action_filter:
+                return true;
+            case R.id.action_alarm:
+                if(alarmActivated == true) {
+                    Drawable alarmOff = ContextCompat.getDrawable(this, R.drawable.ic_alarm_off);
+                    item.setIcon(alarmOff);
+                    alarmActivated = false;
+                    //SE DESACTIVO LA ALARMA
+                } else {
+                    Drawable alarm = ContextCompat.getDrawable(this, R.drawable.ic_alarm);
+                    item.setIcon(alarm);
+                    alarmActivated = true;
+                    //SE ACTIVO
+                }
                 return true;
             case R.id.fast_filter_item_anio:
                 item.setChecked(true);

@@ -7,6 +7,13 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         app:showAsAction="ifRoom"/>-->
+    <item android:id="@+id/action_alarm"
+        android:title="@string/action_settings"
+        android:icon="@drawable/ic_alarm"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom">
+    </item>
+
     <item android:id="@+id/action_filter"
         android:title="@string/action_settings"
         android:icon="@drawable/ic_action_filter"
@@ -35,4 +42,5 @@
             </group>
         </menu>
     </item>
+
 </menu>
