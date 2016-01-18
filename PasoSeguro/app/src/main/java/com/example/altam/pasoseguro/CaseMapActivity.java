@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -170,19 +171,43 @@ public class CaseMapActivity extends  AppCompatActivity implements OnMapReadyCal
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
         String provider = locationManager.getBestProvider(criteria, true);
         Location myLocation = locationManager.getLastKnownLocation(provider);
-        lat = myLocation.getLatitude();
+        if(myLocation!=null){
+            double latitude = myLocation.getLatitude();
+            double longitude = myLocation.getLongitude();
+            LatLng gye = new LatLng(latitude,longitude);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 17));
+        }
 
-        // Get longitude of the current location
-        lng = myLocation.getLongitude();
+        final LocationListener mLocationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(final Location location) {
+                double latitude = location.getLatitude();
+                // Get longitude of the current location
+                double longitude = location.getLongitude();
+                LatLng gye = new LatLng(latitude,longitude);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 17));
+            }
 
-        LatLng gye = new LatLng(lat,lng);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 14));
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(lat, lng))
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.board))
-        );
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1800000, 500, mLocationListener);
     }
 
 

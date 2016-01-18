@@ -29,6 +29,9 @@
                 <item
                     android:id="@+id/fast_filter_item_anio"
                     android:title="@string/fast_filter_item_anio" />
+                <item
+                    android:id="@+id/fast_filter_item_custom"
+                    android:title="@string/fast_filter_item_custom" />
             </group>
         </menu>
     </item>

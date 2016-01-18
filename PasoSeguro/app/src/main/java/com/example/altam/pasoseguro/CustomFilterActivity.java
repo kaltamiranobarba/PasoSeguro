@@ -24,13 +24,12 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class CustomFilterActivity extends AppCompatActivity implements View.OnClickListener {
-    EditText et_fromDate, et_toDate;
+    EditText et_fromDate;
     Bundle extras;
     DatePickerDialog fromDatePickerDialog;
-    DatePickerDialog toDatePickerDialog;
     private SimpleDateFormat dateFormatter;
     String title, description;
-    int yearF, dayF, monthF, yearT, dayT, monthT;
+    int yearF, dayF, monthF;
     Button filter;
     CheckBox checkAbusoVerbal, checkSilbidos, checkContacto, checkMiradas, checkInsinuacion, checkExposicion, checkGestos;
     ArrayList<String> types = new ArrayList<String>();
@@ -55,7 +54,6 @@ public class CustomFilterActivity extends AppCompatActivity implements View.OnCl
         checkGestos = (CheckBox) findViewById(R.id.checkGestos);
 
         et_fromDate = (EditText) findViewById(R.id.et_fromDate);
-        et_toDate = (EditText) findViewById(R.id.et_toDate);
         extras = getIntent().getExtras();
         filter = (Button)findViewById(R.id.btn_siguiente);
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
@@ -66,10 +64,6 @@ public class CustomFilterActivity extends AppCompatActivity implements View.OnCl
                 intent.putExtra("yearF",yearF);
                 intent.putExtra("monthF",monthF);
                 intent.putExtra("dayF",dayF);
-
-                intent.putExtra("yearT",yearT);
-                intent.putExtra("monthT",monthT);
-                intent.putExtra("dayT", dayT);
                 getTypes();
                 for ( String s: types) {
                     intent.putExtra(s,s);
@@ -98,7 +92,7 @@ public class CustomFilterActivity extends AppCompatActivity implements View.OnCl
 
     private void setDateTimeField() {
         et_fromDate.setOnClickListener(this);
-        et_toDate.setOnClickListener(this);
+
 
         Calendar newCalendar = Calendar.getInstance();
         fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
@@ -115,26 +109,13 @@ public class CustomFilterActivity extends AppCompatActivity implements View.OnCl
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
-        toDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                yearT = year;
-                monthT = monthOfYear+1;
-                dayT = dayOfMonth;
-                newDate.set(year, monthOfYear, dayOfMonth);
-                et_toDate.setText(dateFormatter.format(newDate.getTime()));
-            }
-
-        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
     @Override
     public void onClick(View v) {
         if(v == et_fromDate) {
             fromDatePickerDialog.show();
-        } else if(v == et_toDate) {
-            toDatePickerDialog.show();
         }
     }
 

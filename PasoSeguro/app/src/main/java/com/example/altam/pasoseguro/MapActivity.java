@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
@@ -61,9 +62,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private FloatingActionButton fab;
     private GoogleApiClient client;
     private List<ParseObject> allObjects;
+    final double latitude=0, longitude=0;
 
-
-    int yearF, dayF, monthF, yearT, dayT, monthT;
+    int yearF, dayF, monthF;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +122,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         Intent intent3 = new Intent(MapActivity.this, CustomFilterActivity.class);
                         startActivity(intent3);
                     break;
+                    case R.id.navigation_item_danger:
+                        Intent intent4 = new Intent(MapActivity.this, DangerZoneActivity.class);
+                        startActivity(intent4);
+                        break;
                 }
                 return true;
             }
@@ -167,22 +172,38 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 return true;
             case R.id.fast_filter_item_anio:
                 item.setChecked(true);
-                setTitle("Casos del Año");
+                setTitle("Reportes del Año");
                 getCases(1);
                 Toast.makeText(getApplicationContext(),"Reportes de este año", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.fast_filter_item_mes:
                 item.setChecked(true);
-                setTitle("Casos del Mes");
+                setTitle("Reportes del Mes");
                 getCases(2);
                 Toast.makeText(getApplicationContext(),"Reportes de este mes", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.fast_filter_item_semana:
                 item.setChecked(true);
-                setTitle("Casos de la Semana");
+                setTitle("Reportes de la Semana");
                 getCases(3);
                 Toast.makeText(getApplicationContext(),"Reportes de esta semana", Toast.LENGTH_LONG).show();
                 return true;
+            case R.id.fast_filter_item_custom:
+                item.setChecked(true);
+                setTitle("Reportes personalizados");
+                extras = getIntent().getExtras();
+                if(extras!=null){
+                    yearF = extras.getInt("yearF");
+                    monthF = extras.getInt("montF");
+                    dayF = extras.getInt("dayF");
+                    getCases(4);
+                    Toast.makeText(getApplicationContext(),"Reportes personalizados", Toast.LENGTH_LONG).show();
+                    return true;
+                }else{
+                    Toast.makeText(getApplicationContext(),"No ha definido fecha", Toast.LENGTH_LONG).show();
+                }
+
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -199,33 +220,58 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
         mMap = googleMap;
         mMap.setMyLocationEnabled(true);
         Toast.makeText(getApplicationContext(),  "Buscando tu ubicación...", Toast.LENGTH_LONG).show();
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_LOW);
         String provider = locationManager.getBestProvider(criteria, true);
         Location myLocation = locationManager.getLastKnownLocation(provider);
-        double latitude = myLocation.getLatitude();
+        if(myLocation!=null){
+            double latitude = myLocation.getLatitude();
 
-        // Get longitude of the current location
-        double longitude = myLocation.getLongitude();
-        LatLng gye = new LatLng(latitude,longitude);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 16));
-
-        /*
-        extras = getIntent().getExtras();
-        if(extras!=null){
-            yearF = extras.getInt("yearF");
-            monthF = extras.getInt("montF");
-            dayF = extras.getInt("dayF");
-            yearT = extras.getInt("yearT");
-            monthT = extras.getInt("montT");
-            dayT = extras.getInt("dayT");
-            getCases(4);
+            // Get longitude of the current location
+            double longitude = myLocation.getLongitude();
+            LatLng gye = new LatLng(latitude,longitude);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 17));
         }
-        */
+
+         final LocationListener mLocationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(final Location location) {
+               double latitude = location.getLatitude();
+
+                // Get longitude of the current location
+                double longitude = location.getLongitude();
+                LatLng gye = new LatLng(latitude,longitude);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 17));
+            }
+
+             @Override
+             public void onStatusChanged(String provider, int status, Bundle extras) {
+
+             }
+
+             @Override
+             public void onProviderEnabled(String provider) {
+
+             }
+
+             @Override
+             public void onProviderDisabled(String provider) {
+
+             }
+         };
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1800000,500, mLocationListener);
+
+
+
+        getCases(3);
+
     }
 
 
@@ -270,9 +316,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         client.disconnect();
     }
 
-    public void getCasesYear(){
 
-    }
 
 
     public void getCases(int mode){
@@ -300,9 +344,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 break;
             case 4:
                 query.whereGreaterThanOrEqualTo("year", yearF);
-
-                //query.whereGreaterThanOrEqualTo("month", monthF);
-                //query.whereGreaterThanOrEqualTo("day", dayF);
+                query.whereGreaterThanOrEqualTo("month", monthF);
+                query.whereGreaterThanOrEqualTo("day",dayF);
                 break;
         }
 
