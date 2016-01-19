@@ -1,12 +1,16 @@
 package com.example.altam.pasoseguro;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -67,6 +71,27 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     final double latitude=0, longitude=0;
     boolean alarmActivated;
     int yearF, dayF, monthF;
+    private BroadcastReceiver netStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean connected = false;
+
+            final ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            final NetworkInfo netInfo = mConnectivityManager.getActiveNetworkInfo();
+            if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+                connected = true;
+                int size = PasoSeguro.pendingCases.size();
+                //Toast.makeText(MapActivity.this, "Conexión reestablecida, casos encolados: " + size, Toast.LENGTH_LONG).show();
+                for (ParseObject po : PasoSeguro.pendingCases) {
+                    po.saveInBackground();
+                }
+                PasoSeguro.pendingCases.clear();
+            } else {
+                //Toast.makeText(MapActivity.this, "Sin conexion", Toast.LENGTH_LONG).show();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +101,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         ParseUser puser = ParseUser.getCurrentUser();
         this.user = puser.getString("username");
 
-
+        registerReceiver(netStateReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION ));
 
         //mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
