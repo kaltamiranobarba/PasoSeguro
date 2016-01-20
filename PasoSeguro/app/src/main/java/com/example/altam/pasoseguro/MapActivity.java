@@ -12,6 +12,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.os.Bundle;
@@ -71,6 +72,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     final double latitude=0, longitude=0;
     boolean alarmActivated;
     int yearF, dayF, monthF;
+
+    private Thread thread = null;
+    private RunnableVibrate runnable = new RunnableVibrate(this);
+
     private BroadcastReceiver netStateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -97,6 +102,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_final);
+
+
 
         ParseUser puser = ParseUser.getCurrentUser();
         this.user = puser.getString("username");
@@ -211,11 +218,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     item.setIcon(alarmOff);
                     alarmActivated = false;
                     //SE DESACTIVO LA ALARMA
+                    if (thread != null) {
+                        runnable.terminate();
+                        try {
+                            thread.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 } else {
                     Drawable alarm = ContextCompat.getDrawable(this, R.drawable.ic_alarm);
                     item.setIcon(alarm);
                     alarmActivated = true;
                     //SE ACTIVO
+                    runnable.init();
+                    thread = new Thread(runnable);
+                    thread.start();
+
                 }
                 return true;
             case R.id.fast_filter_item_anio:
