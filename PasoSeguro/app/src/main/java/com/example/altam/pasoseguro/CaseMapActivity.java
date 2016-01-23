@@ -1,5 +1,9 @@
 package com.example.altam.pasoseguro;
 
+import android.annotation.TargetApi;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,6 +13,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -82,7 +87,7 @@ public class CaseMapActivity extends  AppCompatActivity implements OnMapReadyCal
                 ParseUser puser = ParseUser.getCurrentUser();
                 user = puser.getString("username");
                 getTypes();
-                addCase("prueba",lat,lng,types);
+                addCase(user,lat,lng,types);
 
                 Intent i = new Intent(CaseMapActivity.this, MapActivity.class );
                 startActivity(i);
@@ -142,6 +147,7 @@ public class CaseMapActivity extends  AppCompatActivity implements OnMapReadyCal
     }
 
 
+
     public void addCase(String user, double lat, double lng, ArrayList<String> types){
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
@@ -163,10 +169,28 @@ public class CaseMapActivity extends  AppCompatActivity implements OnMapReadyCal
         final NetworkInfo netInfo = mConnectivityManager.getActiveNetworkInfo();
         if (netInfo != null && netInfo.isConnectedOrConnecting()) {
             po.saveInBackground();
-            Toast.makeText(CaseMapActivity.this, "Historia registrada", Toast.LENGTH_LONG).show();
+            Toast.makeText(CaseMapActivity.this, "Reporte registrado", Toast.LENGTH_LONG).show();
         } else {
             PasoSeguro.pendingCases.add(po);
-            Toast.makeText(CaseMapActivity.this, "Caso en cola", Toast.LENGTH_LONG).show();
+            Toast.makeText(CaseMapActivity.this, "Reporte en cola", Toast.LENGTH_LONG).show();
+
+            Intent intent = new Intent(this, MapActivity.class);
+            PasoSeguro.NOTIFICATION_ID = (int) System.currentTimeMillis();
+            PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
+
+            Notification n  = new Notification.Builder(this)
+                    .setContentTitle("Reporte espera")
+                    .setContentText("Se enviará automaticamente cuando te conectes a internet")
+                    .setSmallIcon(R.drawable.board)
+                    //.setContentIntent(pIntent)
+                    .setAutoCancel(true).build()
+                 ;
+
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+            notificationManager.notify(0, n);
+
+
         }
     }
 

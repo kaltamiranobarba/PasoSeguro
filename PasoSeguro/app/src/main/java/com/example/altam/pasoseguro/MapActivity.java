@@ -1,5 +1,6 @@
 package com.example.altam.pasoseguro;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -87,7 +88,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             if (netInfo != null && netInfo.isConnectedOrConnecting()) {
                 connected = true;
                 int size = PasoSeguro.pendingCases.size();
-                //Toast.makeText(MapActivity.this, "Conexión reestablecida, casos encolados: " + size, Toast.LENGTH_LONG).show();
+                NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.cancelAll();
                 for (ParseObject po : PasoSeguro.pendingCases) {
                     po.saveInBackground();
                 }

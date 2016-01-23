@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class PasoSeguro extends Application {
 
     public static ArrayList<ParseObject> pendingCases = new ArrayList<ParseObject>();
+    public static int NOTIFICATION_ID;
 
     @Override
     public void onCreate(){
