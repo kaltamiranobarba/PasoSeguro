@@ -56,7 +56,7 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
     private GoogleMap mMap;
     private List<ParseObject> allObjects;
     private ArrayList<ParseGeoPoint> locations = new ArrayList<ParseGeoPoint>();
-    private FloatingActionButton fab;
+
     private DrawerLayout mDrawerLayout;
     private TextView drawerText;
     private String user;
@@ -86,14 +86,7 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
 
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(DangerZoneActivity.this, CaseMapActivity.class);
-                startActivity(i);
-            }
-        });
+
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -193,7 +186,7 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1800000, 500, mLocationListener);
 
 
-        getCases();
+
         createZones();
     }
 
@@ -202,16 +195,6 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
         double lat, lng;
         allObjects = new ArrayList<ParseObject>();
         ParseGeoPoint location;
-        /*
-        Calendar c = Calendar.getInstance();
-        int cYear = c.get(Calendar.YEAR);
-        int cMonth = c.get(Calendar.MONTH)+1;
-        int cWeek = c.get(Calendar.WEEK_OF_YEAR);
-        int m = cMonth  -2;
-        if(m <= 0){
-            cYear--;
-            m = 12  - m;
-        }*/
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Cases");
         query.whereExists("location");
         try {
@@ -228,13 +211,11 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
 
 
     public void createZones() {
+        getCases();
         ArrayList<ParseGeoPoint> lTaken = new ArrayList<ParseGeoPoint>();
         ArrayList<ParseGeoPoint> lTakenTmp = new ArrayList<ParseGeoPoint>();
         int count = 0;
         double d;
-
-
-
         for (ParseGeoPoint i : locations) {
             if (!lTaken.contains(i)) {
                 for (ParseGeoPoint j : locations) {

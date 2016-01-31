@@ -10,28 +10,33 @@
     tools:context="com.example.altam.pasoseguro.MyProfileActivity"
     android:orientation="vertical">
 
-    <TextView
+    <EditText
         android:id="@+id/txt_profileUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="usuario"/>
 
-    <TextView
+    <EditText
         android:id="@+id/txt_profilePass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="clave"/>
 
-    <TextView
+    <EditText
         android:id="@+id/txt_profileAge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="edad"/>
 
-    <TextView
+    <EditText
         android:id="@+id/txt_profileEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="correo"/>
 
+    <Button
+        android:id="@+id/btn_profileUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Actualizar"/>
 </LinearLayout>

@@ -14,6 +14,8 @@ public class PasoSeguro extends Application {
 
     public static ArrayList<ParseObject> pendingCases = new ArrayList<ParseObject>();
     public static int NOTIFICATION_ID;
+    public static boolean alarmActivated;
+    public static boolean vibrate;
 
     @Override
     public void onCreate(){
