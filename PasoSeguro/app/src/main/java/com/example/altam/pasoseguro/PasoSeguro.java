@@ -16,6 +16,8 @@ public class PasoSeguro extends Application {
     public static int NOTIFICATION_ID;
     public static boolean alarmActivated;
     public static boolean vibrate;
+    public static boolean off=false;
+    public static boolean started = off;
 
     @Override
     public void onCreate(){

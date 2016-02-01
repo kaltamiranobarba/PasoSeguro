@@ -251,7 +251,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     PasoSeguro.alarmActivated = false;
 
                     //SE DESACTIVO LA ALARMA
-                    asynkTaskVibrate.cancel(true);
+                    /*
+                    if(PasoSeguro.off==true)
+                        asynkTaskVibrate.cancel(true);
+                        */
+
                 } else {
                     Drawable alarm = ContextCompat.getDrawable(this, R.drawable.ic_alarm);
                     item.setIcon(alarm);
@@ -260,11 +264,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     //SE ACTIVO
                     circles.clear();
                     createZones();
-
-                    if(PasoSeguro.vibrate==true) {
+                    PasoSeguro.off = false;
+                    PasoSeguro.started = true;
+                    /*
+                   if(PasoSeguro.vibrate==true) {
                         asynkTaskVibrate = new AsyncTaskVibrate(this);
                         asynkTaskVibrate.execute(new String[] { " " });
-                    }
+                    }*/
 
                     Toast.makeText(getApplicationContext(),"ALARMA ACTIVADA", Toast.LENGTH_LONG).show();
                 }
@@ -319,7 +325,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_LOW);
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
         String provider = locationManager.getBestProvider(criteria, true);
         Location myLocation = locationManager.getLastKnownLocation(provider);
         if(myLocation!=null){
@@ -346,14 +352,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     ParseGeoPoint pgpC = new ParseGeoPoint(co.getCenter().latitude, co.getCenter().longitude);
                     if(pgpC.distanceInKilometersTo(pgp)<0.03){
                         Toast.makeText(getApplicationContext(),  "ESTAS DENTRO DE ZONA DE PELIGRO", Toast.LENGTH_LONG).show();
-                        PasoSeguro.vibrate = true;
-                    }
-                    else{
-                        PasoSeguro.vibrate = false;
+                        count++;
                     }
                 }
-            }
+                Toast.makeText(getApplicationContext(),  "Contador "+count, Toast.LENGTH_LONG).show();
 
+
+
+                if(count>0) {
+                    asynkTaskVibrate = new AsyncTaskVibrate(MapActivity.this);
+                    asynkTaskVibrate.execute(new String[]{" "});
+                }
+                if(count==0){
+                    if(asynkTaskVibrate!=null){
+                        asynkTaskVibrate.cancel(true);
+                    }
+                }
+
+            }
             }
 
              @Override
@@ -372,7 +388,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
              }
          };
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, mLocationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 0, mLocationListener);
 
         getCases(3);
 
@@ -675,9 +691,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         helpBuilder.setTitle("Conoce:");
         helpBuilder.setMessage("Te avisaremos cuando estes cerca de una zona peligrosa");
         final AlertDialog helpDialog = helpBuilder.create();
+        helpDialog.show();
 
-
-        helpBuilder.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
+        helpBuilder.setNeutralButton("Cerrar", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -687,7 +703,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         // Remember, create doesn't show the dialog
 
-        helpDialog.show();
+
 
     }
 

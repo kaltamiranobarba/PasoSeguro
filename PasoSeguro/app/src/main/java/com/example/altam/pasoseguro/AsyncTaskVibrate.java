@@ -41,7 +41,7 @@ public class AsyncTaskVibrate extends AsyncTask<String, Void, String> {
 
                     cont++;
                 }
-                Thread.sleep(60000); //Espera 60 segundos para volver a vibrar
+               Thread.sleep(60000); //Espera 60 segundos para volver a vibrar
 
             } catch (InterruptedException e) {
                 isRunning = false;
