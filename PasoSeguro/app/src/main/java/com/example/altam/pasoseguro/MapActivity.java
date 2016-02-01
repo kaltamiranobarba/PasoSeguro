@@ -17,6 +17,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -71,6 +72,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.logging.Handler;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener{
 
@@ -94,8 +96,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     boolean mov = false;
     boolean vibrate=false;
     Marker myMarker ;
-    private Thread thread = null;
-    private RunnableVibrate runnable = new RunnableVibrate(this);
+
+    private AsyncTask asynkTaskVibrate;
 
     private BroadcastReceiver netStateReceiver = new BroadcastReceiver() {
         @Override
@@ -247,15 +249,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     Drawable alarmOff = ContextCompat.getDrawable(this, R.drawable.ic_alarm_off);
                     item.setIcon(alarmOff);
                     PasoSeguro.alarmActivated = false;
+
                     //SE DESACTIVO LA ALARMA
-                    if (thread != null) {
-                        runnable.terminate();
-                        try {
-                            thread.join();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    asynkTaskVibrate.cancel(true);
                 } else {
                     Drawable alarm = ContextCompat.getDrawable(this, R.drawable.ic_alarm);
                     item.setIcon(alarm);
@@ -264,12 +260,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     //SE ACTIVO
                     circles.clear();
                     createZones();
+
                     if(PasoSeguro.vibrate==true) {
-                        /*
-                        runnable.init();
-                        thread = new Thread(runnable);
-                        thread.start();
-                        */
+                        asynkTaskVibrate = new AsyncTaskVibrate(this);
+                        asynkTaskVibrate.execute(new String[] { " " });
                     }
 
                     Toast.makeText(getApplicationContext(),"ALARMA ACTIVADA", Toast.LENGTH_LONG).show();

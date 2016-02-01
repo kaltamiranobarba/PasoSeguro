@@ -208,8 +208,6 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
         }
     }
 
-
-
     public void createZones() {
         getCases();
         ArrayList<ParseGeoPoint> lTaken = new ArrayList<ParseGeoPoint>();

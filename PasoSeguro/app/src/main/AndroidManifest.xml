@@ -22,12 +22,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
 
+        <!-- Key s4 -->
+        <!--
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyB__rB8u7d0bqx_Vf0VhMoS1Z_SkIQfIkQ" />
+             -->
         <!--
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -137,7 +142,21 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MapActivity" />
         </activity>
-        <activity android:name=".MyProfileActivity" />
+        <activity
+            android:name=".MyProfileActivity"
+            android:label="Mi Perfil">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MapActivity" />
+
+        </activity>
+
         <activity
             android:name=".DangerZoneActivity"
             android:label="@string/title_activity_danger_zone">
@@ -146,6 +165,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
         </activity>
     </application>
 
