@@ -66,4 +66,17 @@
         android:layout_below="@+id/checkGestos"
         />
 
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_popUpCancel"
+        android:text="Cancelar"
+        android:layout_height="40dp"
+        android:layout_width="match_parent"
+        android:layout_marginTop="5dp"
+        android:textColor="#000"
+        android:textSize="14dp"
+        android:typeface="sans"
+        android:background="#FF4081"
+        android:layout_below="@+id/btn_popUpSave"
+        />
+
 </LinearLayout>

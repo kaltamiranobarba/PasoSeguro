@@ -18,6 +18,7 @@ public class PasoSeguro extends Application {
     public static boolean vibrate;
     public static boolean off=false;
     public static boolean started = off;
+    public static int yearS, dayS, monthS;
 
     @Override
     public void onCreate(){

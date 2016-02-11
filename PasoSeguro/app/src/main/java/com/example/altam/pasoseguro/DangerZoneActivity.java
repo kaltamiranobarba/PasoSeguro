@@ -75,7 +75,9 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        /*
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);*/
+
         actionBar.setDisplayHomeAsUpEnabled(true);
 
 
@@ -87,7 +89,7 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-
+    /*
         final NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -125,7 +127,7 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
 
         drawerText = (TextView) findViewById(R.id.drawer_header_textview);
         drawerText.setText(user);
-
+*/
         alarmActivated = false;
     }
 
@@ -185,8 +187,6 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1800000, 500, mLocationListener);
 
-
-
         createZones();
     }
 
@@ -197,12 +197,14 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
         ParseGeoPoint location;
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Cases");
         query.whereExists("location");
+        query.setLimit(500);
         try {
             allObjects = query.find();
             for(ParseObject o : allObjects){
                 location = o.getParseGeoPoint("location");
                 locations.add(location);
             }
+            System.out.print("Se trajo total casos"+allObjects.size());
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -225,19 +227,19 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
                         }
                     }
                 }
+                System.out.println("Encontro " + count);
                 if (count >= 10) {
                     CircleOptions co = new CircleOptions();
                     co.center(new LatLng(i.getLatitude(), i.getLongitude()));
                     co.radius(30);
                     co.strokeColor(Color.RED);
                     co.strokeWidth(1);
-                    if(count>=10 && count < 20)
-                        co.fillColor(0x40FFFF00);
-
+                    if(count < 20)
+                        co.fillColor(0x40F3F781);
                     if(count >= 20 && count<30 )
-                        co.fillColor(0x40ffa500);
+                        co.fillColor(0x40F7BE81);
                     if(count>=30)
-                        co.fillColor(0x40ff0000);
+                        co.fillColor(0x40B40404);
 
                     mMap.addCircle(co);
                     lTaken.addAll(lTakenTmp);
@@ -247,7 +249,7 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
             }
         }
     }
-
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -261,8 +263,8 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
             alarmItem.setIcon(alarmOff);
         }
         return true;
-    }
-
+    }*/
+/*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -270,6 +272,7 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         switch (id) {
+
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
@@ -324,8 +327,8 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
 
         }
         return super.onOptionsItemSelected(item);
-    }
-
+    }*/
+/*
     public void getCases(int mode){
         double lat, lng;
         allObjects = new ArrayList<ParseObject>();
@@ -391,5 +394,5 @@ public class DangerZoneActivity extends AppCompatActivity implements OnMapReadyC
 
             }
         });
-    }
+    }*/
 }

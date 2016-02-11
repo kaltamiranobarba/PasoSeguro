@@ -29,18 +29,23 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
@@ -74,7 +79,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.logging.Handler;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener{
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, LocationListener, GoogleApiClient.ConnectionCallbacks, com.google.android.gms.location.LocationListener{
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private DrawerLayout mDrawerLayout;
@@ -85,19 +90,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private GoogleApiClient client;
     private List<ParseObject> allObjects;
     final double latitude=0, longitude=0;
-
+    LocationManager locationManager;
     int yearF, dayF, monthF;
     CheckBox checkAbusoVerbal, checkSilbidos, checkContacto, checkMiradas, checkInsinuacion, checkExposicion, checkGestos;
     ArrayList<String> types = new ArrayList<String>();
     double lat, lng;
-    Button b;
+    Button b , b2;
     private ArrayList<ParseGeoPoint> locations = new ArrayList<ParseGeoPoint>();
     final public ArrayList<CircleOptions> circles = new ArrayList<>();
     boolean mov = false;
     boolean vibrate=false;
     Marker myMarker ;
-
-    private AsyncTask asynkTaskVibrate;
+    LocationRequest mLocationRequest;
+    ArrayList<AsyncTaskVibrate> atvl = new ArrayList<AsyncTaskVibrate>();
+    Location mLastLocation;
+    Notification n1;
+    NotificationManager notificationManager;
+    Boolean pers=false;
 
     private BroadcastReceiver netStateReceiver = new BroadcastReceiver() {
         @Override
@@ -126,18 +135,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_final);
+        circles.clear();
+        createZones();
 
-
-
-
+        /*locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,0, this);*/
 
         ParseUser puser = ParseUser.getCurrentUser();
         this.user = puser.getString("username");
 
         registerReceiver(netStateReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION ));
 
-        //mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
+        //mToolbar = (Toolbar) findViewById(R.id.toolbar);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -208,11 +218,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).addConnectionCallbacks(this).addApi(LocationServices.API).build();
+
+
 
         PasoSeguro.alarmActivated = false;
+        setTitle((Html.fromHtml("<small>Reportes de la semana</small>")));
 
     }
+
 
 
     @Override
@@ -233,6 +247,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        //locationManager.removeUpdates(this);
+    }
+
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -249,58 +270,62 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     Drawable alarmOff = ContextCompat.getDrawable(this, R.drawable.ic_alarm_off);
                     item.setIcon(alarmOff);
                     PasoSeguro.alarmActivated = false;
-
+                    notificationManager.cancelAll();
+                    Toast.makeText(getApplicationContext(),"ALARMA DESACTIVADA", Toast.LENGTH_LONG).show();
                     //SE DESACTIVO LA ALARMA
                     /*
                     if(PasoSeguro.off==true)
                         asynkTaskVibrate.cancel(true);
                         */
-
                 } else {
                     Drawable alarm = ContextCompat.getDrawable(this, R.drawable.ic_alarm);
                     item.setIcon(alarm);
                     PasoSeguro.alarmActivated = true;
                     showPopUpInfoAlert();
                     //SE ACTIVO
-                    circles.clear();
-                    createZones();
+
                     PasoSeguro.off = false;
                     PasoSeguro.started = true;
-                    /*
-                   if(PasoSeguro.vibrate==true) {
-                        asynkTaskVibrate = new AsyncTaskVibrate(this);
-                        asynkTaskVibrate.execute(new String[] { " " });
-                    }*/
-
                     Toast.makeText(getApplicationContext(),"ALARMA ACTIVADA", Toast.LENGTH_LONG).show();
+                    n1  = new Notification.Builder(this)
+                            .setContentTitle("Alarma activada")
+                            .setContentText("Te avisaremos si estas en una zona peligrosa")
+                            .setSmallIcon(R.drawable.board)
+                                    //.setContentIntent(pIntent)
+                            .setOngoing(true)
+                            .setAutoCancel(false).build();
+
+                     notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+                    notificationManager.notify(0, n1);
                 }
                 return true;
             case R.id.fast_filter_item_anio:
                 item.setChecked(true);
-                setTitle("Reportes del Año");
+                setTitle((Html.fromHtml("<small>Reportes del año</small>")));
                 getCases(1);
                 Toast.makeText(getApplicationContext(),"Reportes de este año", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.fast_filter_item_mes:
                 item.setChecked(true);
-                setTitle("Reportes del Mes");
+                setTitle((Html.fromHtml("<small>Reportes del mes</small>")));
                 getCases(2);
                 Toast.makeText(getApplicationContext(),"Reportes de este mes", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.fast_filter_item_semana:
                 item.setChecked(true);
-                setTitle("Reportes de la Semana");
+                setTitle((Html.fromHtml("<small>Reportes de la semana</small>")));
                 getCases(3);
                 Toast.makeText(getApplicationContext(),"Reportes de esta semana", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.fast_filter_item_custom:
                 item.setChecked(true);
-                setTitle("Reportes personalizados");
+                setTitle((Html.fromHtml("<small>Reportes personalizados</small>")));
                 extras = getIntent().getExtras();
                 if(extras!=null){
-                    yearF = extras.getInt("yearF");
-                    monthF = extras.getInt("montF");
-                    dayF = extras.getInt("dayF");
+                    PasoSeguro.yearS = extras.getInt("yearF");
+                    PasoSeguro.monthS = extras.getInt("montF");
+                    PasoSeguro.dayS = extras.getInt("dayF");
                     getCases(4);
                     Toast.makeText(getApplicationContext(),"Reportes personalizados", Toast.LENGTH_LONG).show();
                     return true;
@@ -321,77 +346,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap.setMyLocationEnabled(true);
         mMap.setOnMapClickListener(this);
         final ArrayList<CircleOptions> cos = this.circles;
-        Toast.makeText(getApplicationContext(),  "Buscando tu ubicación...", Toast.LENGTH_LONG).show();
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        String provider = locationManager.getBestProvider(criteria, true);
-        Location myLocation = locationManager.getLastKnownLocation(provider);
-        if(myLocation!=null){
-            double latitude = myLocation.getLatitude();
-
-            // Get longitude of the current location
-            double longitude = myLocation.getLongitude();
-            LatLng gye = new LatLng(latitude,longitude);
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 17));
-        }
-
-         final LocationListener mLocationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(final Location location) {
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-                int count =0;
-                LatLng gye = new LatLng(latitude,longitude);
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 18));
-                Toast.makeText(getApplicationContext(),  "LOCATION CHANGED", Toast.LENGTH_LONG).show();
-            if(PasoSeguro.alarmActivated==true){
-                for(CircleOptions co: circles){
-                    ParseGeoPoint pgp = new ParseGeoPoint(latitude, longitude);
-                    ParseGeoPoint pgpC = new ParseGeoPoint(co.getCenter().latitude, co.getCenter().longitude);
-                    if(pgpC.distanceInKilometersTo(pgp)<0.03){
-                        Toast.makeText(getApplicationContext(),  "ESTAS DENTRO DE ZONA DE PELIGRO", Toast.LENGTH_LONG).show();
-                        count++;
-                    }
-                }
-                Toast.makeText(getApplicationContext(),  "Contador "+count, Toast.LENGTH_LONG).show();
-
-
-
-                if(count>0) {
-                    asynkTaskVibrate = new AsyncTaskVibrate(MapActivity.this);
-                    asynkTaskVibrate.execute(new String[]{" "});
-                }
-                if(count==0){
-                    if(asynkTaskVibrate!=null){
-                        asynkTaskVibrate.cancel(true);
-                    }
-                }
-
-            }
-            }
-
-             @Override
-             public void onStatusChanged(String provider, int status, Bundle extras) {
-
-             }
-
-             @Override
-             public void onProviderEnabled(String provider) {
-
-             }
-
-             @Override
-             public void onProviderDisabled(String provider) {
-
-             }
-         };
-
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 0, mLocationListener);
-
+        Toast.makeText(getApplicationContext(), "Buscando tu ubicación...", Toast.LENGTH_LONG).show();
         getCases(3);
 
+        if(pers){
+            getCases(4);
+        }
     }
 
 
@@ -433,6 +393,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 Uri.parse("android-app://com.example.altam.pasoseguro/http/host/path")
         );
         AppIndex.AppIndexApi.end(client, viewAction);
+        //locationManager.removeUpdates(this);
         client.disconnect();
     }
 
@@ -447,9 +408,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         int cYear = c.get(Calendar.YEAR);
         int cMonth = c.get(Calendar.MONTH)+1;
         int cWeek = c.get(Calendar.WEEK_OF_YEAR);
-        mMap.clear();;
+
+        mMap.clear();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Cases");
         query.whereExists("location");
+        query.setLimit(500);
         switch (mode){
             case 1:
                 query.whereEqualTo("year",cYear);
@@ -463,27 +426,42 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 query.whereEqualTo("week",cWeek);
                 break;
             case 4:
-                query.whereGreaterThanOrEqualTo("year", yearF);
-                query.whereGreaterThanOrEqualTo("month", monthF);
-                query.whereGreaterThanOrEqualTo("day",dayF);
+                extras = getIntent().getExtras();
+                if(extras!=null) {
+                    PasoSeguro.yearS = extras.getInt("yearF");
+                    PasoSeguro.monthS = extras.getInt("montF");
+                    PasoSeguro.dayS = extras.getInt("dayF");
+                }
+                query.whereGreaterThanOrEqualTo("year", PasoSeguro.yearS);
+                query.whereGreaterThanOrEqualTo("month", PasoSeguro.monthS);
+                query.whereGreaterThanOrEqualTo("day", PasoSeguro.dayS);
                 break;
         }
 
         query.findInBackground(new FindCallback<ParseObject>() {
+
             @Override
             public void done(List<ParseObject> list, ParseException e) {
+                System.out.println("Se obtuvieron " + list.size());
                 if (e == null) {
                     for (ParseObject o : list) {
                         double lat = o.getParseGeoPoint("location").getLatitude();
                         double lng = o.getParseGeoPoint("location").getLongitude();
                         String des = o.getString("description");
                         String userCase = o.getString("user");
-                        String p = userCase + " vivió:";
+                        String p ;
+                        int hour = o.getInt("hour");
+                        if(hour > 0 && hour <12){
+                             p = userCase +", "+String.valueOf(hour)+"am:";
+                        }
+                        else{
+                             p = userCase +", "+String.valueOf(hour)+"pm:";
+                        }
+
 
                         String id = o.getObjectId();
                         JSONArray types = o.getJSONArray("types");
                         String title = " ";
-
                         try {
                             for (int i = 0; i < types.length(); i++) {
                                 title = title.concat(" " + types.getString(i));
@@ -516,6 +494,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         LayoutInflater inflater = getLayoutInflater();
         View checkboxLayout = inflater.inflate(R.layout.popuplayout, null);
         b = (Button)checkboxLayout.findViewById(R.id.btn_popUpSave);
+        b2 = (Button)checkboxLayout.findViewById(R.id.btn_popUpCancel);
         checkContacto = (CheckBox)  checkboxLayout.findViewById(R.id.checkContacto);
         checkAbusoVerbal = (CheckBox) checkboxLayout.findViewById(R.id.checkAbusoVerbal);
         checkSilbidos = (CheckBox) checkboxLayout.findViewById(R.id.checkSilbidos);
@@ -544,6 +523,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             }
         });
+
+        b2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                helpDialog.cancel();
+            }
+        });
     }
 
     public void getTypes(){
@@ -570,6 +556,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         int month = c.get(Calendar.MONTH)+1;
         int day = c.get(Calendar.DAY_OF_MONTH);
         int week = c.get(Calendar.WEEK_OF_YEAR);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
         ParseObject po = new ParseObject("Cases");
         po.put("user",user);
         po.put("location", new ParseGeoPoint(lat,lng));
@@ -578,6 +565,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         po.put("month",month);
         po.put("day",day);
         po.put("week", week);
+        po.put("hour", hour);
 
         final ConnectivityManager mConnectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -585,7 +573,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         final NetworkInfo netInfo = mConnectivityManager.getActiveNetworkInfo();
         if (netInfo != null && netInfo.isConnectedOrConnecting()) {
             po.saveInBackground();
-            Toast.makeText(MapActivity.this, "Reporte registrado", Toast.LENGTH_LONG).show();
+            Toast.makeText(MapActivity.this, "Reporte guardado", Toast.LENGTH_LONG).show();
         } else {
             PasoSeguro.pendingCases.add(po);
             Toast.makeText(MapActivity.this, "Reporte en cola", Toast.LENGTH_LONG).show();
@@ -596,16 +584,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             Notification n  = new Notification.Builder(this)
                     .setContentTitle("Reporte espera")
-                    .setContentText("Se enviará automaticamente cuando te conectes a internet")
+                    .setSubText("Se enviará automaticamente cuando te conectes a internet")
                     .setSmallIcon(R.drawable.board)
                             //.setContentIntent(pIntent)
-                    .setAutoCancel(true).build()
-                    ;
+                    .setOngoing(true)
+                    .setAutoCancel(false).build();
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
             notificationManager.notify(0, n);
-
 
         }
     }
@@ -625,12 +612,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
 
+
+
     public void getCases() {
-        double lat, lng;
         allObjects = new ArrayList<ParseObject>();
         ParseGeoPoint location;
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Cases");
         query.whereExists("location");
+        query.setLimit(500);
         try {
             allObjects = query.find();
             for(ParseObject o : allObjects){
@@ -690,9 +679,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this);
         helpBuilder.setTitle("Conoce:");
         helpBuilder.setMessage("Te avisaremos cuando estes cerca de una zona peligrosa");
-        final AlertDialog helpDialog = helpBuilder.create();
-        helpDialog.show();
-
+        final AlertDialog helpDialog= helpBuilder.create();
+        Button b = new Button(this);
+        b.setText("Continuar");
+        b.setHeight(25);
+        b.setWidth(500);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                helpDialog.cancel();
+            }
+        });
+        helpDialog.setView(b);
         helpBuilder.setNeutralButton("Cerrar", new DialogInterface.OnClickListener() {
 
             @Override
@@ -701,10 +699,114 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
-        // Remember, create doesn't show the dialog
 
-
+        helpDialog.show();
 
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        int count =0;
+        LatLng gye = new LatLng(latitude,longitude);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 18));
+        //Toast.makeText(getApplicationContext(),  "LOCATION CHANGED", Toast.LENGTH_LONG).show();
+        if(PasoSeguro.alarmActivated==true){
+            for(CircleOptions co: circles){
+                ParseGeoPoint pgp = new ParseGeoPoint(latitude, longitude);
+                ParseGeoPoint pgpC = new ParseGeoPoint(co.getCenter().latitude, co.getCenter().longitude);
+                if(pgpC.distanceInKilometersTo(pgp)<0.03){
+                   // Toast.makeText(getApplicationContext(),  "ESTAS DENTRO DE ZONA DE PELIGRO", Toast.LENGTH_LONG).show();
+                    count++;
+                }
+            }
+            //Toast.makeText(getApplicationContext(),  "Contador "+count, Toast.LENGTH_LONG).show();
+            if(count>0) {
+                AsyncTaskVibrate asynkTaskVibrate =  new AsyncTaskVibrate(MapActivity.this);
+                asynkTaskVibrate.execute(new String[]{" "});
+                atvl.add(asynkTaskVibrate);
+                Notification n  = new Notification.Builder(getApplicationContext())
+                        .setContentTitle("Cuidado:")
+                        .setSubText("Estás dentro de una zona de peligro")
+                        .setSmallIcon(R.drawable.board)
+                                //.setContentIntent(pIntent)
+                        .setAutoCancel(true).build();
+                NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                notificationManager.notify(0, n);
+
+            }
+            if(count==0){
+
+                Notification n  = new Notification.Builder(getApplicationContext())
+                        .setContentTitle("Conoce:")
+                        .setSubText("Te avisaré si estas en una zona de peligro")
+                        .setSmallIcon(R.drawable.boardg)
+                                //.setContentIntent(pIntent)
+                        .setAutoCancel(true).build();
+                NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                notificationManager.notify(0, n);
+                for(AsyncTaskVibrate o :atvl){
+                    o.cancel(true);
+                    o.cancel();
+                }
+            }
+        }else{
+            for(AsyncTaskVibrate o :atvl){
+                o.cancel(true);
+            }
+        }
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        //String provider = locationManager.getBestProvider(criteria, true);
+        Location myLocation = locationManager.getLastKnownLocation(provider);
+        if(myLocation!=null){
+            double latitude = myLocation.getLatitude();
+
+            // Get longitude of the current location
+            double longitude = myLocation.getLongitude();
+            LatLng gye = new LatLng(latitude,longitude);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 18));
+        }
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                client);
+        if (mLastLocation != null) {
+
+            LatLng gye = new LatLng(mLastLocation.getLatitude(),mLastLocation.getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 17));
+        }
+
+        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(mLocationRequest);
+       LocationServices.FusedLocationApi.requestLocationUpdates(client,mLocationRequest,this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
 }

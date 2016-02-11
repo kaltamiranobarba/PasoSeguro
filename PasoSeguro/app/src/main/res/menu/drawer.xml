@@ -10,10 +10,7 @@
             android:id="@+id/navigation_item_my_cases"
             android:icon="@drawable/ic_mycases"
             android:title="@string/nav_item_my_cases" />
-        <item
-            android:id="@+id/navigation_item_alarm"
-            android:icon="@drawable/ic_alarm"
-            android:title="@string/nav_item_alarm" />
+
         <item
             android:id="@+id/navigation_item_custom_filter"
             android:icon="@drawable/ic_action_filter"
