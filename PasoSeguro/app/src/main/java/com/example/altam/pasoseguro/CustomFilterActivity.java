@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -54,12 +55,13 @@ public class CustomFilterActivity extends AppCompatActivity implements View.OnCl
         checkGestos = (CheckBox) findViewById(R.id.checkGestos);
 
         et_fromDate = (EditText) findViewById(R.id.et_fromDate);
-        extras = getIntent().getExtras();
+        //extras = getIntent().getExtras();
         filter = (Button)findViewById(R.id.btn_siguiente);
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
         filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 Intent intent = new Intent(CustomFilterActivity.this, MapActivity.class);
                 intent.putExtra("yearF",yearF);
                 intent.putExtra("monthF",monthF);
@@ -69,9 +71,19 @@ public class CustomFilterActivity extends AppCompatActivity implements View.OnCl
                     intent.putExtra(s,s);
                 }
                 startActivity(intent);
+                */
+                PasoSeguro.yearS = yearF;
+                PasoSeguro.monthS = monthF;
+                PasoSeguro.dayS = dayF;
+                PasoSeguro.types.clear();
+                getTypes();
+                PasoSeguro.types.addAll(types);
+                Intent intent = new Intent(CustomFilterActivity.this, MapActivity.class);
+                startActivity(intent);
             }
         });
         setDateTimeField();
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
 
@@ -92,17 +104,14 @@ public class CustomFilterActivity extends AppCompatActivity implements View.OnCl
 
     private void setDateTimeField() {
         et_fromDate.setOnClickListener(this);
-
-
         Calendar newCalendar = Calendar.getInstance();
         fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
                 yearF = year;
                 monthF = monthOfYear+1;
                 dayF = dayOfMonth;
-                Toast.makeText(CustomFilterActivity.this, yearF+" "+monthF+" "+dayF, Toast.LENGTH_LONG).show();
+                //Toast.makeText(CustomFilterActivity.this, yearF+" "+monthF+" "+dayF, Toast.LENGTH_LONG).show();
                 newDate.set(year, monthOfYear, dayOfMonth);
                 et_fromDate.setText(dateFormatter.format(newDate.getTime()));
             }

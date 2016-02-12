@@ -20,6 +20,10 @@
             android:icon="@drawable/ic_danger"
             android:title="@string/nav_item_danger" />
         <item
+            android:id="@+id/navigation_item_alarm"
+            android:icon="@drawable/ic_alarm"
+            android:title="@string/nav_item_alarm" />
+        <item
             android:id="@+id/navigation_item_logout"
             android:icon="@drawable/ic_logout"
             android:title="@string/nav_item_logout" />

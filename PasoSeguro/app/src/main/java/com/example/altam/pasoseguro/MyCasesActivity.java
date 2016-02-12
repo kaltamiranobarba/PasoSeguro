@@ -69,6 +69,7 @@ public class MyCasesActivity extends AppCompatActivity implements OnMapReadyCall
     FloatingActionButton fab;
     int total=0;
     TextView totalCases;
+    boolean mov=false;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -94,11 +95,12 @@ public class MyCasesActivity extends AppCompatActivity implements OnMapReadyCall
         user = puser.getString("username");
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        //client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).addConnectionCallbacks(this).addApi(LocationServices.API).build();
 
         totalCases = (TextView) findViewById(R.id.totalCases);
         totalCases.setText(String.valueOf(total));
-      fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -228,7 +230,9 @@ public class MyCasesActivity extends AppCompatActivity implements OnMapReadyCall
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         LatLng gye = new LatLng(latitude,longitude);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 18));
+        if(!mov) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 18));
+        }
     }
 
     @Override
@@ -244,7 +248,6 @@ public class MyCasesActivity extends AppCompatActivity implements OnMapReadyCall
         Location myLocation = locationManager.getLastKnownLocation(provider);
         if(myLocation!=null){
             double latitude = myLocation.getLatitude();
-
             // Get longitude of the current location
             double longitude = myLocation.getLongitude();
             LatLng gye = new LatLng(latitude,longitude);
@@ -295,12 +298,13 @@ public class MyCasesActivity extends AppCompatActivity implements OnMapReadyCall
         if (mLastLocation != null) {
 
             LatLng gye = new LatLng(mLastLocation.getLatitude(),mLastLocation.getLongitude());
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 17));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gye, 18));
+            mov = true;
         }
 
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(60000);
-        mLocationRequest.setFastestInterval(30000);
+        mLocationRequest.setFastestInterval(60000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()

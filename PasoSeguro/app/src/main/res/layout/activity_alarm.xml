@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.altam.pasoseguro.AlarmActivity"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorAccent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selecciona tus preferencias:"
+        android:id="@+id/textView"
+        android:layout_weight="0.08"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vibrar"
+        android:id="@+id/vibrate"
+        android:layout_gravity="left"
+        android:layout_marginLeft="65dp"
+        android:layout_marginTop="10dp"
+        android:textSize="16dp" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sonar"
+        android:id="@+id/sound"
+        android:layout_gravity="left"
+        android:layout_marginLeft="65dp"
+        android:textSize="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Intensidad de la alarma"
+        android:id="@+id/textView2"
+        android:layout_weight="0.08"
+        android:textSize="18dp"
+        android:layout_marginTop="30dp"
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp" />
+
+    <Spinner
+        android:layout_width="250px"
+        android:layout_height="100px"
+        android:id="@+id/listView"
+        android:layout_gravity="left"
+        android:layout_marginLeft="65dp"
+        android:layout_marginTop="10dp" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_alarmSave"
+        android:text="Guardar"
+        android:layout_height="40dp"
+        android:layout_width="350dp"
+        android:layout_marginTop="240dp"
+        android:textColor="#000"
+        android:textSize="14dp"
+        android:typeface="sans"
+        android:background="#FF4081"
+        android:layout_gravity="center_horizontal"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_alarmCancel"
+        android:text="Cancelar"
+        android:layout_height="40dp"
+        android:layout_width="350dp"
+        android:layout_marginTop="10dp"
+        android:textColor="#000"
+        android:textSize="14dp"
+        android:typeface="sans"
+        android:background="#FF4081"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="5dp" />
+
+
+
+</LinearLayout>

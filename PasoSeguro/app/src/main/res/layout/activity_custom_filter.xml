@@ -2,9 +2,7 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-
-    >
+    android:layout_height="match_parent">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -30,76 +28,101 @@
         android:orientation="vertical">
 
         <!-- From Label -->
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="75dp">
-            <EditText android:id="@+id/et_fromDate"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Desde"/>
-        </android.support.design.widget.TextInputLayout>
-
-
-
-        <CheckBox
-            android:id="@+id/checkAbusoVerbal"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Abuso Verbal"
-            android:layout_below="@+id/inputDescription"/>
-        <CheckBox
-            android:id="@+id/checkContacto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Contacto"
-            android:layout_below="@+id/checkAbusoVerbal"/>
-        <CheckBox
-            android:id="@+id/checkSilbidos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Silbidos"
-            android:layout_below="@+id/checkContacto"/>
+            android:id="@+id/textView3"
+            android:text="Seleccione fecha:"
+            android:textSize="18dp"
+            android:textStyle="bold" />
 
-        <CheckBox
-            android:id="@+id/checkMiradas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Miradas"
-            android:layout_below="@+id/checkSilbidos"/>
 
-        <CheckBox
-            android:id="@+id/checkExposicion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Exposición genital"
-            android:layout_below="@+id/checkMiradas"/>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp">
+                    <EditText android:id="@+id/et_fromDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Desde"/>
+                </android.support.design.widget.TextInputLayout>
 
-        <CheckBox
-            android:id="@+id/checkInsinuacion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Insinuaciones"
-            android:layout_below="@+id/checkExposicion"/>
 
-        <CheckBox
-            android:id="@+id/checkGestos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gestos"
-            android:layout_below="@+id/checkInsinuacion"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Seleccione tipos:"
+                    android:id="@+id/textView4"
+                    android:textStyle="bold"
+                    android:textSize="18dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="15dp" />
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_siguiente"
-            android:text="Filtrar"
-            android:layout_height="40dp"
-            android:layout_width="match_parent"
-            android:layout_marginTop="15dp"
-            android:textColor="#000"
-            android:textSize="14dp"
-            android:typeface="sans"
-            android:background="#FF4081"/>
+                <CheckBox
+                    android:id="@+id/checkAbusoVerbal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Abuso Verbal"
+                    android:layout_below="@+id/inputDescription"
+                    android:layout_marginLeft="25dp" />
+                <CheckBox
+                    android:id="@+id/checkContacto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Contacto"
+                    android:layout_below="@+id/checkAbusoVerbal"
+                    android:layout_marginLeft="25dp" />
+                <CheckBox
+                    android:id="@+id/checkSilbidos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Silbidos"
+                    android:layout_below="@+id/checkContacto"
+                    android:layout_marginLeft="25dp" />
 
-    </LinearLayout>
+                <CheckBox
+                    android:id="@+id/checkMiradas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Miradas"
+                    android:layout_below="@+id/checkSilbidos"
+                    android:layout_marginLeft="25dp" />
 
-</LinearLayout>
-</ScrollView>
+                <CheckBox
+                    android:id="@+id/checkExposicion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Exposición genital"
+                    android:layout_below="@+id/checkMiradas"
+                    android:layout_marginLeft="25dp" />
+
+                <CheckBox
+                    android:id="@+id/checkInsinuacion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Insinuaciones"
+                    android:layout_below="@+id/checkExposicion"
+                    android:layout_marginLeft="25dp" />
+
+                <CheckBox
+                    android:id="@+id/checkGestos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gestos"
+                    android:layout_below="@+id/checkInsinuacion"
+                    android:layout_marginLeft="25dp" />
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_siguiente"
+                    android:text="Filtrar"
+                    android:layout_height="40dp"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="100dp"
+                    android:textColor="#000"
+                    android:textSize="14dp"
+                    android:typeface="sans"
+                    android:background="#FF4081"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+        </ScrollView>
